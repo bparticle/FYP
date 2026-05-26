@@ -296,8 +296,6 @@ main {
   border: 2px solid var(--paper);
 }
 .raffle__steps li {
-  display: grid;
-  grid-template-columns: 64px 1fr;
   gap: 14px;
   padding: 14px 18px;
   border-bottom: 1px solid var(--paper);
