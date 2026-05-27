@@ -49,6 +49,15 @@ encode_poster() {
     "$output"
 }
 
+encode_physical_photo() {
+  local input="$1" output="$2" size="${3:-900}"
+  ffmpeg -hide_banner -loglevel error -y \
+    -i "$input" \
+    -vf "crop=min(iw\,ih):min(iw\,ih),scale=${size}:${size}:flags=lanczos" \
+    -q:v 3 \
+    "$output"
+}
+
 require_ffmpeg
 mkdir -p "$OUT"
 
@@ -80,5 +89,22 @@ encode_companion2() {
 encode_static1
 encode_companion1
 encode_companion2
+
+encode_physical_photos() {
+  local pairs=(
+    "physical_card.jpg:physical-card.jpg"
+    "physical_close-up.jpg:physical-close-up.jpg"
+    "physical_card+backing.jpg:physical-card-backing.jpg"
+  )
+  for pair in "${pairs[@]}"; do
+    local input="$RAW/${pair%%:*}"
+    local output="$OUT/${pair##*:}"
+    [[ -f "$input" ]] || { echo "Skipping missing $input" >&2; continue; }
+    echo "Encoding ${pair%%:*} ..."
+    encode_physical_photo "$input" "$output"
+  done
+}
+
+encode_physical_photos
 
 echo "Done. Outputs written to public/media/"

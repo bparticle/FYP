@@ -78,6 +78,22 @@ function Encode-Poster {
     )
 }
 
+function Encode-PhysicalPhoto {
+    param(
+        [string]$Source,
+        [string]$Output,
+        [int]$Size = 900
+    )
+
+    & ffmpeg @(
+        "-hide_banner", "-loglevel", "error", "-y",
+        "-i", $Source,
+        "-vf", "crop=min(iw\,ih):min(iw\,ih),scale=${Size}:${Size}:flags=lanczos",
+        "-q:v", "3",
+        $Output
+    )
+}
+
 Require-Ffmpeg
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
 
@@ -124,6 +140,24 @@ foreach ($job in $jobs) {
 
     $posterOut = Join-Path $Out $job.Poster
     Encode-Poster -Source $inputPath -Output $posterOut -Size $job.Size -AtSeconds $job.PosterAt
+}
+
+$photos = @(
+    @{ Raw = "physical_card.jpg"; Out = "physical-card.jpg" },
+    @{ Raw = "physical_close-up.jpg"; Out = "physical-close-up.jpg" },
+    @{ Raw = "physical_card+backing.jpg"; Out = "physical-card-backing.jpg" }
+)
+
+foreach ($photo in $photos) {
+    $inputPath = Join-Path $Raw $photo.Raw
+    if (-not (Test-Path $inputPath)) {
+        Write-Warning "Skipping missing photo: $inputPath"
+        continue
+    }
+
+    Write-Host "Encoding $($photo.Raw) ..."
+    $photoOut = Join-Path $Out $photo.Out
+    Encode-PhysicalPhoto -Source $inputPath -Output $photoOut
 }
 
 Write-Host "Done. Outputs written to public/media/"

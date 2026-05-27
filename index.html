@@ -54,8 +54,8 @@
   <section class="hero" id="piece" aria-labelledby="hero-title">
 
     <!-- Atmospheric backdrop — static still, washed -->
-    <img class="hero__bg" src="./public/media/fyp-static.png" alt="" width="1280" height="1280"
-      decoding="async" fetchpriority="high" aria-hidden="true" />
+    <img class="hero__bg" src="./public/media/fyp-static.png" alt="" width="1280" height="1280" decoding="async"
+      fetchpriority="high" aria-hidden="true" />
 
     <div class="hero__chrome">
       <span class="hero__id">
@@ -173,11 +173,23 @@
       </ol>
 
       <figure class="prints" aria-label="3D printed collectibles">
-        <div class="prints__cell" data-label="C01"></div>
-        <div class="prints__cell" data-label="C02"></div>
-        <div class="prints__cell" data-label="C03"></div>
-        <figcaption class="prints__cap">3D printed collectibles, raffled to holders. placeholders shown — real photos
-          drop soon.</figcaption>
+        <div class="prints__cell">
+          <img src="./public/media/physical-card.jpg" alt="3D printed collectible — front" width="900" height="900"
+            loading="lazy" decoding="async" />
+          <span class="prints__label">C01</span>
+        </div>
+        <div class="prints__cell">
+          <img src="./public/media/physical-card-backing.jpg" alt="3D printed collectible with backing board"
+            width="900" height="900" loading="lazy" decoding="async" />
+
+          <span class="prints__label">C02</span>
+        </div>
+        <div class="prints__cell">
+          <img src="./public/media/physical-close-up.jpg" alt="3D printed collectible — close-up detail" width="900"
+            height="900" loading="lazy" decoding="async" />
+          <span class="prints__label">C03</span>
+        </div>
+        <figcaption class="prints__cap">3D printed collectibles, raffled to holders.</figcaption>
       </figure>
 
       <p class="raffle__fineprint">one entry per held edition. shipped worldwide.</p>
