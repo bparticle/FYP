@@ -204,8 +204,8 @@ a:hover, a:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(28px, 6vh, 72px);
-  padding: clamp(72px, 9vh, 120px) 4vw 0;
+  gap: clamp(20px, 4vh, 56px);
+  padding: clamp(56px, 7vh, 96px) 3vw 0;
 }
 
 .triptych__stage {
@@ -213,10 +213,10 @@ a:hover, a:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: clamp(6px, 1.2vw, 18px);
+  gap: clamp(8px, 1.4vw, 22px);
   width: 100%;
-  max-width: 1180px;
-  min-height: clamp(220px, 42vh, 420px);
+  max-width: min(96vw, 1320px);
+  min-height: clamp(280px, 48vh, 540px);
   perspective: 2400px;
   perspective-origin: 50% 40%;
   transform-style: preserve-3d;
@@ -226,14 +226,14 @@ a:hover, a:focus-visible {
 .tp {
   position: relative;
   flex: 0 0 auto;
-  width: clamp(150px, 22vw, 320px);
+  width: clamp(168px, 24vw, 360px);
   aspect-ratio: 1 / 1;
   transform-style: preserve-3d;
   transition: transform 1400ms cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
 }
 .tp--center {
-  width: clamp(190px, 28vw, 400px);
+  width: clamp(212px, 30vw, 440px);
   z-index: 0;
 }
 .tp--left,
@@ -375,15 +375,15 @@ html.is-dragging .tp { transition: none !important; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   text-align: center;
-  max-width: 760px;
-  padding: 0 4vw;
+  max-width: 680px;
+  padding: 0 3vw;
 }
 .triptych__wordmark {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: clamp(72px, 12.5vw, 184px);
+  font-size: clamp(52px, 7.5vw, 120px);
   line-height: 0.82;
   letter-spacing: -0.05em;
   margin: 0;
@@ -787,27 +787,30 @@ main {
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 900px) {
+
+/* tablet — slight overlap, still the horizontal altarpiece */
+@media (max-width: 900px) and (min-width: 821px) {
   :root {
     --tp-open:   12deg;
     --tp-closed: 128deg;
   }
 
-  .hero { padding-top: 64px; }
+  .hero { padding-top: 56px; }
   .triptych { padding-top: clamp(20px, 5vh, 56px); gap: clamp(20px, 4vh, 48px); }
   .triptych__stage {
     gap: 0;
     min-height: clamp(200px, 38vh, 320px);
     max-width: min(100%, 760px);
   }
-  /* wings tuck behind the altar — keeps all three readable without crushing width */
-  .tp { width: clamp(132px, 24vw, 220px); }
-  .tp--center { width: clamp(172px, 34vw, 300px); z-index: 2; }
-  .tp--left  { margin-right: clamp(-28px, -5vw, -12px); z-index: 1; }
-  .tp--right { margin-left:  clamp(-28px, -5vw, -12px); z-index: 1; }
+  .tp { width: clamp(140px, 22vw, 220px); }
+  .tp--center { width: clamp(180px, 32vw, 300px); z-index: 2; }
+  .tp--left  { margin-right: clamp(-24px, -4vw, -10px); z-index: 1; }
+  .tp--right { margin-left:  clamp(-24px, -4vw, -10px); z-index: 1; }
   .tp__label { font-size: 9.5px; padding: 4px 7px; gap: 6px; }
   .tp__label--center { font-size: 10px; padding: 5px 9px; }
+}
 
+@media (max-width: 900px) {
   .companions__pair { grid-template-columns: 1fr; }
   .prints { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .prints__cell:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
@@ -817,20 +820,47 @@ main {
   .links__list { box-shadow: 8px 8px 0 var(--ink); }
 }
 
-/* phone portrait — vertical altarpiece: altar on the predella, wings below */
-@media (max-width: 560px) {
+/*
+  Mobile — vertical altarpiece (≤820px).
+  Center panel hero-sized on top; wings sit on the predella below.
+  Never squeeze three panels into one row on a phone.
+*/
+@media (max-width: 820px) {
   :root {
-    --tp-open:   14deg;
-    --tp-closed: 130deg;
+    --tp-open:   11deg;
+    --tp-closed: 126deg;
   }
 
   body { font-size: 14px; }
-  .hero__chrome { padding: 10px 12px; flex-wrap: wrap; }
-  .hero__nav { width: 100%; justify-content: flex-end; }
+
+  .hero {
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: clamp(32px, 6vh, 64px);
+  }
+  .hero__chrome {
+    position: relative;
+    padding: 12px 16px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hero__id { font-size: 10px; padding: 5px 8px; }
+  .hero__locator-cell { min-width: 16px; font-size: 8px; padding: 2px 3px; }
+  .hero__nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .hero__nav a {
+    font-size: 11px;
+    padding: 7px 10px;
+    min-height: 36px;
+  }
 
   .triptych {
-    padding-top: clamp(12px, 3vh, 40px);
-    gap: clamp(16px, 3vh, 36px);
+    padding: clamp(8px, 2vh, 24px) 5vw 0;
+    gap: clamp(24px, 5vh, 40px);
   }
   .triptych__stage {
     display: grid;
@@ -840,54 +870,67 @@ main {
       "left right";
     align-items: center;
     justify-items: center;
-    gap: clamp(10px, 2.8vw, 16px);
-    width: min(100%, 360px);
+    row-gap: clamp(18px, 4vw, 28px);
+    column-gap: clamp(12px, 3vw, 20px);
+    width: min(100%, 400px);
+    max-width: 100%;
     min-height: 0;
-    perspective: 1800px;
-    perspective-origin: 50% 28%;
+    perspective: 1600px;
+    perspective-origin: 50% 26%;
   }
   .triptych__stage::after {
     content: "";
     grid-area: center;
     align-self: end;
     justify-self: center;
-    width: min(72%, 220px);
+    width: min(68%, 240px);
     height: 1px;
     background: var(--ink);
-    opacity: 0.22;
-    transform: translateY(calc(50% + clamp(5px, 1.4vw, 8px)));
+    opacity: 0.2;
+    transform: translateY(calc(50% + clamp(8px, 2vw, 14px)));
     pointer-events: none;
   }
+
+  .tp { margin: 0; }
   .tp--center {
     grid-area: center;
-    width: min(88vw, 300px);
-    margin: 0;
+    width: min(92vw, 360px);
     z-index: 2;
   }
   .tp--left {
     grid-area: left;
-    width: min(42vw, 168px);
-    margin: 0;
+    width: min(44vw, 188px);
     justify-self: end;
     z-index: 1;
   }
   .tp--right {
     grid-area: right;
-    width: min(42vw, 168px);
-    margin: 0;
+    width: min(44vw, 188px);
     justify-self: start;
     z-index: 1;
   }
-  .tp__label { font-size: 9px; padding: 4px 7px; gap: 5px; bottom: 7px; left: 7px; }
-  .tp__label--center { font-size: 10px; padding: 5px 9px; bottom: 10px; left: 10px; }
-  .tp__cover-no { font-size: clamp(40px, 11vw, 80px); }
+
+  .tp__label { font-size: 9.5px; padding: 4px 8px; gap: 6px; bottom: 8px; left: 8px; }
+  .tp__label--center { font-size: 10.5px; padding: 6px 10px; bottom: 12px; left: 12px; }
+  .tp__cover-no { font-size: clamp(44px, 12vw, 88px); }
   .tp__cover-name { font-size: 10px; letter-spacing: 0.16em; }
   .tp__cover-tag { font-size: 8.5px; bottom: 10px; }
 
-  .triptych__wordmark { font-size: clamp(64px, 22vw, 120px); }
-  .triptych__title { font-size: 11.5px; letter-spacing: 0.1em; }
-  .triptych__predella { font-size: 12px; }
-  .triptych__facts { font-size: 10.5px; padding-left: 12px; padding-right: 12px; }
+  .triptych__plaque { gap: 18px; padding: 0 2vw; }
+  .triptych__wordmark { font-size: clamp(56px, 20vw, 104px); }
+  .triptych__title { font-size: 11.5px; letter-spacing: 0.1em; line-height: 1.45; }
+  .triptych__predella { font-size: 12px; line-height: 1.55; }
+  .triptych__facts {
+    font-size: 10.5px;
+    padding: 16px 16px 0;
+    gap: 6px;
+    line-height: 1.5;
+  }
+
+  .motion-toggle,
+  .fold-toggle { right: 8px; font-size: 10px; padding: 8px 10px; min-height: 40px; }
+  .fold-toggle { bottom: 56px; }
+  .motion-toggle { bottom: 8px; }
 
   .raffle { padding: 26px 18px; box-shadow: 6px 6px 0 var(--ink); }
   .raffle__steps li { grid-template-columns: 50px 1fr; padding: 12px 14px; }
@@ -898,27 +941,39 @@ main {
   .links__list { box-shadow: 6px 6px 0 var(--ink); }
 }
 
-/* phone landscape — back to the hinged row, but with overlap not vw-crush */
-@media (max-width: 900px) and (orientation: landscape) and (max-height: 520px) {
+/* short landscape phones — scroll the altarpiece instead of crushing it */
+@media (max-width: 820px) and (orientation: landscape) and (max-height: 460px) {
   .triptych__stage {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     align-items: center;
+    gap: clamp(12px, 3vh, 20px);
     width: 100%;
-    max-width: min(100%, 820px);
-    min-height: clamp(140px, 52vh, 240px);
-    gap: 0;
+    max-width: none;
+    min-height: 0;
+    padding: 0 5vw;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .triptych__stage::-webkit-scrollbar { display: none; }
   .triptych__stage::after { content: none; }
-  .tp { width: clamp(118px, 22vh, 190px); }
-  .tp--center {
-    width: clamp(150px, 30vh, 240px);
-    margin: 0;
-    z-index: 2;
+
+  .tp {
+    flex: 0 0 auto;
+    width: clamp(150px, 38vh, 220px);
+    scroll-snap-align: center;
   }
-  .tp--left  { margin-right: clamp(-22px, -4vh, -10px); justify-self: auto; }
-  .tp--right { margin-left:  clamp(-22px, -4vh, -10px); justify-self: auto; }
+  .tp--center {
+    width: clamp(180px, 46vh, 260px);
+    order: 0;
+  }
+  .tp--left  { order: -1; }
+  .tp--right { order: 1; }
 }
 
 /* =========================================================
