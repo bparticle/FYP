@@ -1,160 +1,163 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>FYP — Sirius Crocodile / genesis piece / Tezos</title>
-<meta name="description" content="FYP — the genesis piece by Sirius Crocodile on Tezos. Open edition with 3D printed collectibles raffled to holders. Two companion NFT's. Part of Objkt One; shown at NFC Lisbon, June 2026." />
-<meta name="theme-color" content="#000000" />
-<meta name="color-scheme" content="light" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>FYP — Sirius Crocodile / genesis piece / Tezos</title>
+  <meta name="description"
+    content="FYP — the genesis piece by Sirius Crocodile on Tezos. Open edition with 3D printed collectibles raffled to holders. Two companion NFT's. Part of Objkt One; shown at NFC Lisbon, June 2026." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="light" />
 
-<!-- open graph / social -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="FYP — Sirius Crocodile" />
-<meta property="og:description" content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026. Open edition + 3D printed collectibles raffled to holders. Two companion NFT's." />
-<meta property="og:image" content="./public/media/fyp-poster.jpg" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="FYP — Sirius Crocodile" />
-<meta name="twitter:description" content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026." />
-<meta name="twitter:image" content="./public/media/fyp-poster.jpg" />
+  <!-- open graph / social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="FYP — Sirius Crocodile" />
+  <meta property="og:description"
+    content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026. Open edition + 3D printed collectibles raffled to holders. Two companion NFT's." />
+  <meta property="og:image" content="./public/media/fyp-poster.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="FYP — Sirius Crocodile" />
+  <meta name="twitter:description" content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026." />
+  <meta name="twitter:image" content="./public/media/fyp-poster.jpg" />
 
-<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
-<link rel="stylesheet" href="./style.css" />
+  <link rel="icon"
+    href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
+
 <body>
 
-<a class="skip-link" href="#main">skip to content</a>
+  <a class="skip-link" href="#main">skip to content</a>
 
-<!-- ============ HERO — dimmed loop backdrop + card on top, fades into salmon ============ -->
-<section class="hero" id="piece" aria-labelledby="hero-title">
-  <video
-    class="hero__bg"
-    autoplay loop muted playsinline preload="metadata"
-    poster="./public/media/fyp-poster.jpg"
-    aria-hidden="true">
-    <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-    <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-  </video>
+  <!-- ============ HERO — dimmed loop backdrop + card on top, fades into salmon ============ -->
+  <section class="hero" id="piece" aria-labelledby="hero-title">
+    <video class="hero__bg" autoplay loop muted playsinline preload="metadata" poster="./public/media/fyp-poster.jpg"
+      aria-hidden="true">
+      <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+      <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+    </video>
 
-  <div class="hero__chrome">
-    <span class="hero__id">SIRIUS&nbsp;CROCODILE&nbsp;//&nbsp;GENESIS&nbsp;001</span>
-    <nav class="hero__nav" aria-label="In-page">
-      <a href="#raffle">raffle</a>
-      <a href="#companions">NFT's</a>
-      <a href="#links">links</a>
-    </nav>
-  </div>
-
-  <article class="hero__card" aria-labelledby="hero-title">
-    <div class="hero__card-media">
-      <video
-        autoplay loop muted playsinline preload="metadata"
-        poster="./public/media/fyp-poster.jpg"
-        aria-label="FYP — the genesis piece. Hand-drawn loop on blush ground.">
-        <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-        <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-      </video>
+    <div class="hero__chrome">
+      <span class="hero__id">SIRIUS&nbsp;CROCODILE&nbsp;//&nbsp;GENESIS&nbsp;001</span>
+      <nav class="hero__nav" aria-label="In-page">
+        <a href="#raffle">raffle</a>
+        <a href="#companions">NFT's</a>
+        <a href="#links">links</a>
+      </nav>
     </div>
-    <div class="hero__card-copy">
-      <div class="hero__card-top">
-        <span><b>GENESIS&nbsp;001</b> &middot; SIRIUS&nbsp;CROCODILE</span>
-        <span>OE&nbsp;//&nbsp;TEZOS</span>
+
+    <article class="hero__card" aria-labelledby="hero-title">
+      <div class="hero__card-media">
+        <video autoplay loop muted playsinline preload="metadata" poster="./public/media/fyp-poster.jpg"
+          aria-label="FYP — the genesis piece. Hand-drawn loop on blush ground.">
+          <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+          <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+        </video>
       </div>
-      <h1 id="hero-title" class="hero__wordmark" aria-label="FYP">FYP</h1>
-      <p class="hero__tag">
-        genesis piece on <em>tezos</em>. open edition. closes when it closes.
-      </p>
-      <ul class="hero__facts">
-        <li><span>objkt&nbsp;one curation</span></li>
-        <li><span>nfc lisbon &middot; jun 2026</span></li>
-        <li><span>+ two companion NFT's</span></li>
+      <div class="hero__card-copy">
+        <div class="hero__card-top">
+          <span><b>GENESIS&nbsp;001</b> &middot; SIRIUS&nbsp;CROCODILE</span>
+          <span>OE&nbsp;//&nbsp;TEZOS</span>
+        </div>
+        <h1 id="hero-title" class="hero__wordmark" aria-label="FYP">FYP</h1>
+        <p class="hero__tag">
+          genesis piece on <em>tezos</em>. open edition. closes when it closes.
+        </p>
+        <ul class="hero__facts">
+          <li><span>objkt&nbsp;one curation</span></li>
+          <li><span>nfc lisbon &middot; jun 2026</span></li>
+          <li><span>+ two companion NFT's</span></li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <main id="main">
+
+    <!-- ============ RAFFLE — inverted, the punch ============ -->
+    <section class="raffle" id="raffle" aria-labelledby="raffle-title">
+      <h2 id="raffle-title" class="raffle__h">
+        Physical raffle
+      </h2>
+
+      <ol class="raffle__steps" aria-label="how the raffle works">
+        <li><b>01</b> mint the open edition on <a href="https://objkt.com" target="_blank" rel="noopener">objkt</a>.
+        </li>
+        <li><b>02</b> hold the piece through the snapshot.</li>
+        <li><b>03</b> 3D printed collectibles are raffled among holders.</li>
+      </ol>
+
+      <figure class="prints" aria-label="3D printed collectibles">
+        <div class="prints__cell" data-label="C01"></div>
+        <div class="prints__cell" data-label="C02"></div>
+        <div class="prints__cell" data-label="C03"></div>
+        <figcaption class="prints__cap">3D printed collectibles, raffled to holders. placeholders shown — real photos
+          drop soon.</figcaption>
+      </figure>
+
+      <p class="raffle__fineprint">one entry per held edition. shipped worldwide.</p>
+    </section>
+
+    <!-- ============ COMPANION NFT's ============ -->
+    <section class="companions" id="companions" aria-labelledby="companions-title">
+      <h2 id="companions-title" class="companions__h">+ two companion pieces</h2>
+
+      <div class="companions__pair">
+        <article class="oneone" aria-labelledby="oneone1-title">
+          <div class="oneone__media">
+            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
+              playsinline preload="metadata" aria-label="Companion 1/1 — figure with phone, hearts and tears."></video>
+          </div>
+          <h3 id="oneone1-title" class="oneone__title">FYP 1</h3>
+          <p class="oneone__meta">1 / 1 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on
+              objkt</a></p>
+        </article>
+
+        <article class="oneone" aria-labelledby="oneone2-title">
+          <div class="oneone__media">
+            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
+              playsinline preload="metadata"
+              aria-label="Companion 1/1 — hollow profile holding a tablet showing a feed."></video>
+          </div>
+          <h3 id="oneone2-title" class="oneone__title">FYP 2</h3>
+          <p class="oneone__meta">10 / 10 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on
+              objkt</a></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ LINKS ============ -->
+    <section class="links" id="links" aria-labelledby="links-title">
+      <h2 id="links-title" class="links__h">links.</h2>
+      <ul class="links__list">
+        <li><a href="https://objkt.com" target="_blank" rel="noopener">objkt.com — the marketplace</a></li>
+        <li><a href="https://objkt.com/exhibitions/fyp-for-your-page-31562766" target="_blank" rel="noopener">objkt.one
+            — the curation</a></li>
+        <li><a href="https://www.nonfungibleconference.com/ " target="_blank" rel="noopener">nfclisbon.com — the
+            show</a></li>
       </ul>
-    </div>
-  </article>
-</section>
+      <p class="links__note">
+        Canonical links live on the artist's socials and on <a href="https://objkt.com" target="_blank"
+          rel="noopener">objkt</a>.
+      </p>
+    </section>
 
-<main id="main">
+  </main>
 
-  <!-- ============ RAFFLE — inverted, the punch ============ -->
-  <section class="raffle" id="raffle" aria-labelledby="raffle-title">
-    <h2 id="raffle-title" class="raffle__h">
-      Physical raffle
-    </h2>
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot" role="contentinfo">
+    <p>&copy; sirius crocodile</p>
+  </footer>
 
-    <ol class="raffle__steps" aria-label="how the raffle works">
-      <li><b>01</b> mint the open edition on <a href="https://objkt.com" target="_blank" rel="noopener">objkt</a>.</li>
-      <li><b>02</b> hold the piece through the snapshot.</li>
-      <li><b>03</b> 3D printed collectibles are raffled among holders.</li>
-    </ol>
+  <!-- a11y: persistent toggle for motion -->
+  <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false"
+    aria-label="Toggle background motion">
+    <span class="motion-toggle__on">motion: on</span>
+    <span class="motion-toggle__off">motion: off</span>
+  </button>
 
-    <figure class="prints" aria-label="3D printed collectibles">
-      <div class="prints__cell" data-label="C01"></div>
-      <div class="prints__cell" data-label="C02"></div>
-      <div class="prints__cell" data-label="C03"></div>
-      <figcaption class="prints__cap">3D printed collectibles, raffled to holders. placeholders shown — real photos drop soon.</figcaption>
-    </figure>
-
-    <p class="raffle__fineprint">one entry per held edition. shipped worldwide.</p>
-  </section>
-
-  <!-- ============ COMPANION NFT's ============ -->
-  <section class="companions" id="companions" aria-labelledby="companions-title">
-    <h2 id="companions-title" class="companions__h">+ two companion pieces</h2>
-
-    <div class="companions__pair">
-      <article class="oneone" aria-labelledby="oneone1-title">
-        <div class="oneone__media">
-          <video
-            src="./public/media/fyp-1-web.mp4"
-            poster="./public/media/fyp-1-poster.jpg"
-            autoplay loop muted playsinline preload="metadata"
-            aria-label="Companion 1/1 — figure with phone, hearts and tears."></video>
-        </div>
-        <h3 id="oneone1-title" class="oneone__title">FYP 1</h3>
-        <p class="oneone__meta">1 / 1 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
-      </article>
-
-      <article class="oneone" aria-labelledby="oneone2-title">
-        <div class="oneone__media">
-          <video
-            src="./public/media/fyp-2-web.mp4"
-            poster="./public/media/fyp-2-poster.jpg"
-            autoplay loop muted playsinline preload="metadata"
-            aria-label="Companion 1/1 — hollow profile holding a tablet showing a feed."></video>
-        </div>
-        <h3 id="oneone2-title" class="oneone__title">FYP 2</h3>
-        <p class="oneone__meta">10 / 10 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============ LINKS ============ -->
-  <section class="links" id="links" aria-labelledby="links-title">
-    <h2 id="links-title" class="links__h">links.</h2>
-    <ul class="links__list">
-      <li><a href="https://objkt.com" target="_blank" rel="noopener">objkt.com — the marketplace</a></li>
-      <li><a href="https://objkt.one" target="_blank" rel="noopener">objkt.one — the curation</a></li>
-      <li><a href="https://www.nfclisbon.com" target="_blank" rel="noopener">nfclisbon.com — the show</a></li>
-      <li><a href="https://tezos.com" target="_blank" rel="noopener">tezos.com — the chain</a></li>
-    </ul>
-    <p class="links__note">
-      Canonical links live on the artist's socials and on <a href="https://objkt.com" target="_blank" rel="noopener">objkt</a>.
-    </p>
-  </section>
-
-</main>
-
-<!-- ============ FOOTER ============ -->
-<footer class="foot" role="contentinfo">
-  <p>&copy; sirius crocodile</p>
-</footer>
-
-<!-- a11y: persistent toggle for motion -->
-<button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false" aria-label="Toggle background motion">
-  <span class="motion-toggle__on">motion: on</span>
-  <span class="motion-toggle__off">motion: off</span>
-</button>
-
-<script src="./script.js" defer></script>
+  <script src="./script.js" defer></script>
 </body>
+
 </html>

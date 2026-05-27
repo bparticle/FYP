@@ -8,11 +8,12 @@ print raffle for holders, plus two companion 1/1s in the same body of work.
 ## Structure
 
 ```
-index.html        — the page
-style.css         — all styles (Functional Anti-Design, art-matched palette)
-script.js         — motion toggle + easter egg
-public/media/     — web-compressed videos and posters
-raw/              — source mp4s (not used by the page)
+index.html              — the page
+style.css               — all styles (Functional Anti-Design, art-matched palette)
+script.js               — motion toggle + easter egg
+scripts/encode-media.*  — ffmpeg pipeline (raw → public/media)
+public/media/           — web-compressed videos and posters
+raw/                    — source mp4s (not used by the page)
 ```
 
 The page uses **relative paths only** (`./public/media/...`), no build step, no
@@ -29,6 +30,41 @@ python3 -m http.server 8000
 
 Or just open `index.html` in a browser (video autoplay generally still works
 because the videos are muted).
+
+## Media encoding
+
+There was no existing encode script — `scripts/encode-media.ps1` (Windows) and
+`scripts/encode-media.sh` (macOS/Linux/Git Bash) now handle it. Both require
+**ffmpeg** on your PATH.
+
+**Source → output mapping**
+
+| Raw file | Outputs in `public/media/` | Size |
+|---|---|---|
+| `FYP_static1.mp4` | `fyp-static1-web.mp4`, `fyp-static1-web.webm`, `fyp-poster.jpg` | 1280×1280 |
+| `FYP_1.mp4` | `fyp-1-web.mp4`, `fyp-1-poster.jpg` | 900×900 |
+| `FYP_2.mp4` | `fyp-2-web.mp4`, `fyp-2-poster.jpg` | 900×900 |
+
+The hero loop gets both H.264 (broad support) and VP9 WebM (smaller where
+supported). Companion pieces are MP4-only. Audio is stripped — every clip on
+the page is muted. Posters are a single JPEG frame extracted from each source.
+
+**Run it**
+
+```powershell
+# Windows (from repo root)
+powershell -ExecutionPolicy Bypass -File .\scripts\encode-media.ps1
+```
+
+```bash
+# macOS / Linux / Git Bash
+chmod +x scripts/encode-media.sh   # once
+./scripts/encode-media.sh
+```
+
+Encoding settings: H.264 CRF 28 (`slow` preset, `faststart` for streaming),
+VP9 CRF 35 for WebM, Lanczos downscale. Re-run whenever you replace files in
+`raw/` — outputs overwrite in place and the HTML paths stay the same.
 
 ## Design notes
 
