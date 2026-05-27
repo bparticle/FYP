@@ -71,48 +71,35 @@ a:hover, a:focus-visible {
 .skip-link:focus { transform: translateY(0); }
 
 /* =========================================================
-   HERO — loop backdrop (dimmed), card on top with clean loop,
-   bottom fades into salmon so the page never cuts hard to white.
+   HERO — ink gallery wall holding the triptych.
+   No background video; the centerpiece carries the loop now.
+   Bottom fades into salmon so the page never cuts hard.
    ========================================================= */
 .hero {
   position: relative;
-  height: 100vh;
-  min-height: 720px;
+  min-height: 100vh;
   overflow: hidden;
   background: var(--ink);
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: clamp(40px, 8vh, 96px);
 }
-.hero__bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-/* soft white wash — lifts the loop into the page instead of dimming it */
-.hero::before {
-  content: "";
-  position: absolute; inset: 0;
-  background: rgba(255, 255, 255, 0.85);
-  z-index: 1;
-  pointer-events: none;
-}
-/* bottom fade to salmon — kills the hard cut */
+/* bottom fade to salmon — kills the hard cut into the next section */
 .hero::after {
   content: "";
   position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 1;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    transparent 42%,
-    rgba(247, 217, 210, 0.10) 58%,
-    rgba(247, 217, 210, 0.55) 78%,
-    rgba(247, 217, 210, 0.92) 94%,
+    transparent 72%,
+    rgba(247, 217, 210, 0.10) 82%,
+    rgba(247, 217, 210, 0.55) 92%,
+    rgba(247, 217, 210, 0.92) 98%,
     var(--blush) 100%
   );
-  z-index: 1;
-  pointer-events: none;
 }
 
 .hero__chrome {
@@ -132,10 +119,34 @@ a:hover, a:focus-visible {
   letter-spacing: 0.12em;
   background: var(--ink);
   color: var(--paper);
-  padding: 7px 9px;
+  padding: 6px 9px;
   border: var(--b-paper);
   pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
+/* triptych locator — three cells, middle inverted = "you are here" */
+.hero__locator {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+.hero__locator-cell {
+  min-width: 18px;
+  text-align: center;
+  padding: 3px 4px;
+  border: 1px solid var(--paper);
+  color: var(--paper);
+  opacity: 0.55;
+}
+.hero__locator-cell.is-active {
+  background: var(--paper);
+  color: var(--ink);
+  opacity: 1;
+}
+.hero__id-text { white-space: nowrap; }
 .hero__nav {
   display: flex;
   gap: 4px;
@@ -162,49 +173,191 @@ a:hover, a:focus-visible {
   outline-color: var(--ink);
 }
 
-/* The card — the formal piece display */
-.hero__card {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+/* =========================================================
+   THE TRIPTYCH — 3D hinged altarpiece.
+   Wings unfold from a folded state on load.
+   Honors the [data-triptych-state] attribute set on <html>
+   by the inline head script (avoids FOUC).
+   ========================================================= */
+.triptych {
+  position: relative;
   z-index: 3;
-  width: min(88vw, 1020px);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: var(--ink);
-  color: var(--paper);
-  box-shadow: 14px 14px 0 var(--ink);
-}
-.hero__card-media {
-  background: var(--ink);
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-right: 2px solid var(--paper);
-}
-.hero__card-media video {
-  width: 100%; height: 100%; object-fit: cover;
-}
-.hero__card-copy {
-  padding: 22px 24px 24px;
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  min-width: 0;
+  align-items: center;
+  gap: clamp(28px, 6vh, 72px);
+  padding: clamp(28px, 7vh, 88px) 4vw 0;
 }
-.hero__card-top {
+
+.triptych__stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(6px, 1.2vw, 18px);
+  width: 100%;
+  max-width: 1180px;
+  min-height: clamp(220px, 42vh, 420px);
+  perspective: 2400px;
+  perspective-origin: 50% 40%;
+  transform-style: preserve-3d;
+}
+
+/* Each panel — a square, ready to be hinged */
+.tp {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(150px, 22vw, 320px);
+  aspect-ratio: 1 / 1;
+  transform-style: preserve-3d;
+  transition: transform 1400ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.tp--center {
+  width: clamp(190px, 28vw, 400px);
+  z-index: 0;
+}
+.tp--left,
+.tp--right {
+  z-index: 1;
+}
+
+/* OPEN STATE — wings angled inward at the "displayed altarpiece" pose */
+.tp--left  { transform-origin: right center; transform: rotateY(-16deg); }
+.tp--right { transform-origin: left center;  transform: rotateY( 16deg); }
+
+/* CLOSED STATE — wings folded over the center, back faces visible.
+   132° (not 180°) so the wings don't overlap each other awkwardly
+   given that our square wings are wider than classical wings would be. */
+[data-triptych-state="closed"] .tp--left  { transform: rotateY(-132deg); }
+[data-triptych-state="closed"] .tp--right { transform: rotateY( 132deg); }
+
+/* FACES — wings have two; center is single-faced */
+.tp__face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background: var(--ink);
+  border: 2px solid var(--paper);
+}
+.tp__face--back { transform: rotateY(180deg); }
+.tp__face video,
+.tp__media video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tp--center .tp__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--ink);
+  border: 2px solid var(--paper);
+}
+
+/* Small museum label on the front of each panel */
+.tp__label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 9px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--paper);
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--paper);
-  color: var(--paper);
+  pointer-events: none;
+  z-index: 2;
 }
-.hero__card-top b { font-weight: 700; }
-.hero__wordmark {
+.tp__label--center {
+  bottom: 14px; left: 14px;
+  padding: 7px 11px;
+  font-size: 11px;
+}
+.tp__no {
+  font-weight: 700;
+  padding-right: 8px;
+  border-right: 1px solid var(--paper);
+}
+.tp__name {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* Back-face cover plate — the closed altarpiece face */
+.tp__cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1px 1fr auto auto 1fr 1px;
+  justify-items: center;
+  align-items: center;
+  padding: 18px;
+  background:
+    repeating-linear-gradient(45deg,
+      transparent 0 16px,
+      rgba(255,255,255,0.025) 16px 17px),
+    var(--ink);
+  color: var(--paper);
+  text-align: center;
+}
+.tp__cover-rule {
+  width: 70%;
+  height: 1px;
+  background: var(--paper);
+  opacity: 0.55;
+}
+.tp__cover-no {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(54px, 9vw, 124px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--paper);
+  grid-row: 3;
+}
+.tp__cover-name {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(11px, 1.35vw, 15px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 6px;
+  grid-row: 4;
+}
+.tp__cover-tag {
+  position: absolute;
+  bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+/* =========================================================
+   PLAQUE — the museum label below the triptych
+   ========================================================= */
+.triptych__plaque {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  max-width: 760px;
+  padding: 0 4vw;
+}
+.triptych__wordmark {
   font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(72px, 12.5vw, 184px);
@@ -213,42 +366,45 @@ a:hover, a:focus-visible {
   margin: 0;
   color: var(--paper);
 }
-.hero__tag {
+.triptych__title {
   font-family: var(--font-mono);
-  font-size: clamp(12px, 1.1vw, 15px);
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  margin: 0;
+  font-size: clamp(12px, 1.2vw, 15px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: -4px 0 0;
   color: var(--paper);
 }
-.hero__tag em {
-  font-style: normal;
-  background: var(--paper);
-  color: var(--ink);
-  padding: 0 6px;
+.triptych__title em {
+  font-style: italic;
+  opacity: 0.86;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
-.hero__facts {
+.triptych__title span { opacity: 0.5; margin: 0 4px; }
+.triptych__predella {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1.05vw, 14px);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  margin: 0;
+  max-width: 56ch;
+  color: var(--paper);
+  opacity: 0.86;
+}
+.triptych__predella em { font-style: italic; }
+.triptych__predella span { opacity: 0.5; margin: 0 4px; }
+.triptych__facts {
   list-style: none;
-  padding: 12px 0 0;
-  margin: auto 0 0;
+  padding: 14px 24px 0;
+  margin: 6px 0 0;
   border-top: 1px solid var(--paper);
   display: grid;
-  gap: 2px;
+  gap: 4px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--paper);
-}
-.hero__facts li {
-  display: grid;
-  grid-template-columns: 14px 1fr;
-  gap: 6px;
-  align-items: baseline;
-}
-.hero__facts li::before {
-  content: "▸";
-  opacity: 0.7;
 }
 
 /* =========================================================
@@ -395,9 +551,17 @@ main {
   font-size: clamp(26px, 4vw, 52px);
   line-height: 1.05;
   letter-spacing: -0.01em;
-  margin: 0 0 26px;
+  margin: 0 0 8px;
   color: var(--ink);
   max-width: 22ch;
+}
+.companions__sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin: 0 0 26px;
+  max-width: 56ch;
+  color: var(--ink);
 }
 .companions__pair {
   display: grid;
@@ -422,16 +586,43 @@ main {
   height: 100%;
   object-fit: cover;
 }
+/* mirrors .hero__card-top — keeps the three pieces visually unified */
+.oneone__top {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 18px;
+  padding: 14px 0 10px;
+  border-bottom: 1px solid var(--paper);
+  color: var(--paper);
+}
+.oneone__top b { font-weight: 700; }
 .oneone__title {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: clamp(18px, 2vw, 26px);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
   margin: 0;
-  padding: 16px 18px 6px;
+  padding: 14px 18px 4px;
   color: var(--paper);
 }
+/* predella on the wings — italic Courier as caption mode */
+.oneone__predella {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding: 0 18px 14px;
+  color: var(--paper);
+  opacity: 0.86;
+}
+.oneone__predella em { font-style: italic; }
 .oneone__meta {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -543,31 +734,18 @@ main {
    RESPONSIVE
    ========================================================= */
 @media (max-width: 900px) {
-  /* Hero: switch to flex so card can be taller than viewport without clipping */
-  .hero {
-    height: auto;
-    min-height: 100vh;
-    padding: 84px 4vw 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .hero__card {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    grid-template-columns: 1fr;
-    width: min(92vw, 540px);
-    margin: 0 auto;
-    box-shadow: 8px 8px 0 var(--ink);
-  }
-  .hero__card-media {
-    border-right: 0;
-    border-bottom: 2px solid var(--paper);
-  }
-  .hero__wordmark { font-size: clamp(80px, 18vw, 140px); }
-  /* Rest of the page */
+  .hero { padding-top: 64px; }
+  .triptych { padding-top: clamp(20px, 5vh, 56px); gap: clamp(20px, 4vh, 48px); }
+  .triptych__stage { gap: 6px; min-height: clamp(200px, 38vh, 320px); }
+  .tp { width: clamp(120px, 25vw, 240px); }
+  .tp--center { width: clamp(160px, 32vw, 300px); }
+  .tp--left  { transform: rotateY(-12deg); }
+  .tp--right { transform: rotateY( 12deg); }
+  [data-triptych-state="closed"] .tp--left  { transform: rotateY(-118deg); }
+  [data-triptych-state="closed"] .tp--right { transform: rotateY( 118deg); }
+  .tp__label { font-size: 9.5px; padding: 4px 7px; gap: 6px; }
+  .tp__label--center { font-size: 10px; padding: 5px 9px; }
+
   .companions__pair { grid-template-columns: 1fr; }
   .prints { grid-template-columns: 1fr 1fr; }
   .prints__cell:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
@@ -578,17 +756,27 @@ main {
 
 @media (max-width: 560px) {
   body { font-size: 14px; }
-  .hero { padding: 76px 4vw 48px; }
   .hero__chrome { padding: 10px 12px; flex-wrap: wrap; }
   .hero__nav { width: 100%; justify-content: flex-end; }
-  .hero__card {
-    width: 92vw;
-    box-shadow: 6px 6px 0 var(--ink);
-  }
-  .hero__card-copy { padding: 18px 18px 20px; gap: 12px; }
-  .hero__card-top { font-size: 9.5px; letter-spacing: 0.12em; }
-  .hero__wordmark { font-size: clamp(72px, 22vw, 120px); }
-  .hero__facts { font-size: 10.5px; }
+
+  .triptych__stage { gap: 4px; perspective: 1600px; min-height: clamp(180px, 36vh, 260px); }
+  .tp { width: 26vw; }
+  .tp--center { width: 34vw; }
+  .tp--left  { transform: rotateY(-8deg); }
+  .tp--right { transform: rotateY( 8deg); }
+  [data-triptych-state="closed"] .tp--left  { transform: rotateY(-104deg); }
+  [data-triptych-state="closed"] .tp--right { transform: rotateY( 104deg); }
+  .tp__label { font-size: 8.5px; padding: 3px 6px; gap: 5px; bottom: 6px; left: 6px; }
+  .tp__label--center { font-size: 9.5px; padding: 4px 7px; }
+  .tp__cover-no { font-size: clamp(40px, 11vw, 80px); }
+  .tp__cover-name { font-size: 10px; letter-spacing: 0.16em; }
+  .tp__cover-tag { font-size: 8.5px; bottom: 10px; }
+
+  .triptych__wordmark { font-size: clamp(64px, 22vw, 120px); }
+  .triptych__title { font-size: 11.5px; letter-spacing: 0.1em; }
+  .triptych__predella { font-size: 12px; }
+  .triptych__facts { font-size: 10.5px; padding-left: 12px; padding-right: 12px; }
+
   .raffle { padding: 26px 18px; box-shadow: 6px 6px 0 var(--ink); }
   .raffle__steps li { grid-template-columns: 50px 1fr; padding: 12px 14px; }
   .prints { grid-template-columns: 1fr; }
@@ -659,7 +847,8 @@ body[data-motion="off"] .oneone:nth-of-type(2) .oneone__media {
     border: 2px solid #000;
     box-shadow: none;
   }
-  .hero__wordmark, .hero__tag, .hero__facts, .hero__card-top { color: #000; }
+  .hero__wordmark, .hero__tag, .hero__facts, .hero__card-top,
+  .hero__scene, .hero__predella { color: #000; }
   .hero__facts { border-color: #000; }
   .hero__card-top { border-color: #000; }
   .raffle, .oneone, .links__list { box-shadow: none; }
@@ -670,6 +859,8 @@ body[data-motion="off"] .oneone:nth-of-type(2) .oneone__media {
   .raffle__fineprint { color: #000; border-top-color: #000; }
   .prints__cap { color: #000; }
   .oneone { background: #fff; color: #000; border: 2px solid #000; }
-  .oneone__title, .oneone__meta { color: #000; }
+  .oneone__title, .oneone__meta, .oneone__top, .oneone__predella { color: #000; }
+  .oneone__top { border-bottom-color: #000; }
   .oneone__media { border-bottom-color: #000; }
+  .companions__sub { color: #000; }
 }

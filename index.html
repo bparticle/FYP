@@ -4,73 +4,142 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>FYP — Sirius Crocodile / genesis piece / Tezos</title>
+  <title>FYP Triptych — Sirius Crocodile / an altarpiece for the algorithm</title>
   <meta name="description"
-    content="FYP — the genesis piece by Sirius Crocodile on Tezos. Open edition with 3D printed collectibles raffled to holders. Two companion NFT's. Part of Objkt One; shown at NFC Lisbon, June 2026." />
+    content="The FYP Triptych by Sirius Crocodile — a three-panel Tezos genesis altarpiece for the algorithm. I. Supplicant · II. Altar (open edition center) · III. Possession. 3D printed collectibles raffled to holders. Objkt One curation. NFC Lisbon, June 2026." />
   <meta name="theme-color" content="#000000" />
   <meta name="color-scheme" content="light" />
 
   <!-- open graph / social -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="FYP — Sirius Crocodile" />
+  <meta property="og:title" content="FYP Triptych — Sirius Crocodile" />
   <meta property="og:description"
-    content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026. Open edition + 3D printed collectibles raffled to holders. Two companion NFT's." />
+    content="An altarpiece for the algorithm. I. Supplicant · II. Altar · III. Possession. Tezos genesis. Objkt One. NFC Lisbon, June 2026." />
   <meta property="og:image" content="./public/media/fyp-poster.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="FYP — Sirius Crocodile" />
-  <meta name="twitter:description" content="Genesis piece on Tezos. Objkt One. NFC Lisbon, June 2026." />
+  <meta name="twitter:title" content="FYP Triptych — Sirius Crocodile" />
+  <meta name="twitter:description" content="An altarpiece for the algorithm. I. Supplicant · II. Altar · III. Possession. Objkt One. NFC Lisbon, June 2026." />
   <meta name="twitter:image" content="./public/media/fyp-poster.jpg" />
 
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
   <link rel="stylesheet" href="./style.css" />
+
+  <!-- Set triptych state synchronously to avoid FOUC. If motion is enabled,
+       page renders in 'closed' state first; main script transitions to 'open'. -->
+  <script>
+  (function(){
+    var pr=false; try{pr=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+    var ms=null; try{ms=localStorage.getItem('fyp.motion')}catch(e){}
+    var off=ms==='off'||(ms==null&&pr);
+    document.documentElement.dataset.triptychState=off?'open':'closed';
+  })();
+  </script>
 </head>
 
 <body>
 
   <a class="skip-link" href="#main">skip to content</a>
 
-  <!-- ============ HERO — dimmed loop backdrop + card on top, fades into salmon ============ -->
+  <!-- ============ HERO — the triptych, hinged panels that unfold on load ============ -->
   <section class="hero" id="piece" aria-labelledby="hero-title">
-    <video class="hero__bg" autoplay loop muted playsinline preload="metadata" poster="./public/media/fyp-poster.jpg"
-      aria-hidden="true">
-      <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-      <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-    </video>
 
     <div class="hero__chrome">
-      <span class="hero__id">SIRIUS&nbsp;CROCODILE&nbsp;//&nbsp;GENESIS&nbsp;001</span>
+      <span class="hero__id">
+        <span class="hero__locator" role="img" aria-label="Panel II of III">
+          <span class="hero__locator-cell" aria-hidden="true">I</span>
+          <span class="hero__locator-cell is-active" aria-hidden="true">II</span>
+          <span class="hero__locator-cell" aria-hidden="true">III</span>
+        </span>
+        <span class="hero__id-text">FYP&nbsp;TRIPTYCH</span>
+      </span>
       <nav class="hero__nav" aria-label="In-page">
         <a href="#raffle">raffle</a>
-        <a href="#companions">NFT's</a>
+        <a href="#companions">panels</a>
         <a href="#links">links</a>
       </nav>
     </div>
 
-    <article class="hero__card" aria-labelledby="hero-title">
-      <div class="hero__card-media">
-        <video autoplay loop muted playsinline preload="metadata" poster="./public/media/fyp-poster.jpg"
-          aria-label="FYP — the genesis piece. Hand-drawn loop on blush ground.">
-          <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-          <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-        </video>
+    <div class="triptych" id="triptych">
+
+      <div class="triptych__stage">
+
+        <!-- LEFT WING — Panel I -->
+        <article class="tp tp--left" aria-label="Panel I — Supplicant">
+          <div class="tp__face tp__face--front">
+            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg"
+              autoplay loop muted playsinline preload="metadata"
+              aria-label="Panel I — Supplicant. Figure with phone, hearts and tears."></video>
+            <div class="tp__label">
+              <span class="tp__no">I</span>
+              <span class="tp__name">Supplicant</span>
+            </div>
+          </div>
+          <div class="tp__face tp__face--back" aria-hidden="true">
+            <div class="tp__cover">
+              <span class="tp__cover-rule"></span>
+              <span class="tp__cover-no">I</span>
+              <span class="tp__cover-name">Supplicant</span>
+              <span class="tp__cover-tag">left wing</span>
+              <span class="tp__cover-rule"></span>
+            </div>
+          </div>
+        </article>
+
+        <!-- CENTER — Panel II -->
+        <article class="tp tp--center" aria-label="Panel II — Altar, the center">
+          <div class="tp__media">
+            <video poster="./public/media/fyp-poster.jpg"
+              autoplay loop muted playsinline preload="metadata"
+              aria-label="Panel II — Altar. Two figures plugged in, souls leaving through the cable.">
+              <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+              <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+            </video>
+            <div class="tp__label tp__label--center">
+              <span class="tp__no">II</span>
+              <span class="tp__name">Altar</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- RIGHT WING — Panel III -->
+        <article class="tp tp--right" aria-label="Panel III — Possession">
+          <div class="tp__face tp__face--front">
+            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg"
+              autoplay loop muted playsinline preload="metadata"
+              aria-label="Panel III — Possession. Hollow profile holding a tablet showing a feed."></video>
+            <div class="tp__label">
+              <span class="tp__no">III</span>
+              <span class="tp__name">Possession</span>
+            </div>
+          </div>
+          <div class="tp__face tp__face--back" aria-hidden="true">
+            <div class="tp__cover">
+              <span class="tp__cover-rule"></span>
+              <span class="tp__cover-no">III</span>
+              <span class="tp__cover-name">Possession</span>
+              <span class="tp__cover-tag">right wing</span>
+              <span class="tp__cover-rule"></span>
+            </div>
+          </div>
+        </article>
+
       </div>
-      <div class="hero__card-copy">
-        <div class="hero__card-top">
-          <span><b>GENESIS&nbsp;001</b> &middot; SIRIUS&nbsp;CROCODILE</span>
-          <span>OE&nbsp;//&nbsp;TEZOS</span>
-        </div>
-        <h1 id="hero-title" class="hero__wordmark" aria-label="FYP">FYP</h1>
-        <p class="hero__tag">
-          genesis piece on <em>tezos</em>. open edition. closes when it closes.
-        </p>
-        <ul class="hero__facts">
-          <li><span>objkt&nbsp;one curation</span></li>
-          <li><span>nfc lisbon &middot; jun 2026</span></li>
-          <li><span>+ two companion NFT's</span></li>
+
+      <!-- Museum plaque beneath the work -->
+      <div class="triptych__plaque">
+        <h1 id="hero-title" class="triptych__wordmark" aria-label="FYP">FYP</h1>
+        <p class="triptych__title">the FYP triptych <span aria-hidden="true">—</span> <em>an altarpiece for the algorithm</em></p>
+        <p class="triptych__predella">II. Altar <span aria-hidden="true">—</span> <em>the altar of the algorithm. souls offered up through the cable.</em></p>
+        <ul class="triptych__facts">
+          <li>open edition &middot; tezos &middot; closes when it closes</li>
+          <li>objkt one curation &middot; nfc lisbon, jun 2026</li>
+          <li>flanked by i. supplicant &amp; iii. possession</li>
         </ul>
       </div>
-    </article>
+
+    </div>
+
   </section>
 
   <main id="main">
@@ -99,30 +168,39 @@
       <p class="raffle__fineprint">one entry per held edition. shipped worldwide.</p>
     </section>
 
-    <!-- ============ COMPANION NFT's ============ -->
+    <!-- ============ THE WINGS — panels i & iii ============ -->
     <section class="companions" id="companions" aria-labelledby="companions-title">
-      <h2 id="companions-title" class="companions__h">+ two companion pieces</h2>
+      <h2 id="companions-title" class="companions__h">the wings.</h2>
+      <p class="companions__sub">i. supplicant &amp; iii. possession — the flanking panels of the fyp triptych.</p>
 
       <div class="companions__pair">
         <article class="oneone" aria-labelledby="oneone1-title">
           <div class="oneone__media">
             <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
-              playsinline preload="metadata" aria-label="Companion 1/1 — figure with phone, hearts and tears."></video>
+              playsinline preload="metadata" aria-label="Panel I — figure with phone, hearts and tears."></video>
           </div>
-          <h3 id="oneone1-title" class="oneone__title">FYP 1</h3>
-          <p class="oneone__meta">1 / 1 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on
-              objkt</a></p>
+          <div class="oneone__top">
+            <span><b>PANEL&nbsp;I</b> &middot; LEFT&nbsp;WING</span>
+            <span>1&nbsp;/&nbsp;1</span>
+          </div>
+          <h3 id="oneone1-title" class="oneone__title">I. Supplicant</h3>
+          <p class="oneone__predella"><em>tears given, hearts offered. the daily liturgy of the timeline.</em></p>
+          <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
         </article>
 
         <article class="oneone" aria-labelledby="oneone2-title">
           <div class="oneone__media">
             <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
               playsinline preload="metadata"
-              aria-label="Companion 1/1 — hollow profile holding a tablet showing a feed."></video>
+              aria-label="Panel III — hollow profile holding a tablet showing a feed."></video>
           </div>
-          <h3 id="oneone2-title" class="oneone__title">FYP 2</h3>
-          <p class="oneone__meta">10 / 10 · tezos · <a href="https://objkt.com" target="_blank" rel="noopener">list on
-              objkt</a></p>
+          <div class="oneone__top">
+            <span><b>PANEL&nbsp;III</b> &middot; RIGHT&nbsp;WING</span>
+            <span>10&nbsp;/&nbsp;10</span>
+          </div>
+          <h3 id="oneone2-title" class="oneone__title">III. Possession</h3>
+          <p class="oneone__predella"><em>the wraith remains. the feed continues. hands no longer still.</em></p>
+          <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
         </article>
       </div>
     </section>
@@ -147,8 +225,15 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="foot" role="contentinfo">
-    <p>&copy; sirius crocodile</p>
+    <p>the fyp triptych &middot; sirius crocodile &middot; mmxxvi</p>
   </footer>
+
+  <!-- Replay the triptych unfold -->
+  <button id="fold-toggle" class="fold-toggle" type="button" aria-pressed="true"
+    aria-label="Fold or unfold the triptych">
+    <span class="fold-toggle__a">fold</span>
+    <span class="fold-toggle__b">unfold</span>
+  </button>
 
   <!-- a11y: persistent toggle for motion -->
   <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false"
