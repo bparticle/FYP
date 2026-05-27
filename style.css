@@ -71,9 +71,8 @@ a:hover, a:focus-visible {
 .skip-link:focus { transform: translateY(0); }
 
 /* =========================================================
-   HERO — ink gallery wall holding the triptych.
-   No background video; the centerpiece carries the loop now.
-   Bottom fades into salmon so the page never cuts hard.
+   HERO — static backdrop washed to near-white,
+   triptych and plaque sit above. Bottom fades to salmon.
    ========================================================= */
 .hero {
   position: relative;
@@ -85,6 +84,21 @@ a:hover, a:focus-visible {
   flex-direction: column;
   padding-bottom: clamp(40px, 8vh, 96px);
 }
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+/* white wash — lifts the backdrop into the page instead of dimming it */
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 1;
+  pointer-events: none;
+}
 /* bottom fade to salmon — kills the hard cut into the next section */
 .hero::after {
   content: "";
@@ -94,10 +108,10 @@ a:hover, a:focus-visible {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    transparent 72%,
-    rgba(247, 217, 210, 0.10) 82%,
-    rgba(247, 217, 210, 0.55) 92%,
-    rgba(247, 217, 210, 0.92) 98%,
+    transparent 62%,
+    rgba(247, 217, 210, 0.20) 76%,
+    rgba(247, 217, 210, 0.65) 90%,
+    rgba(247, 217, 210, 0.95) 98%,
     var(--blush) 100%
   );
 }
@@ -187,7 +201,7 @@ a:hover, a:focus-visible {
   flex-direction: column;
   align-items: center;
   gap: clamp(28px, 6vh, 72px);
-  padding: clamp(28px, 7vh, 88px) 4vw 0;
+  padding: clamp(72px, 9vh, 120px) 4vw 0;
 }
 
 .triptych__stage {
@@ -223,15 +237,20 @@ a:hover, a:focus-visible {
   z-index: 1;
 }
 
-/* OPEN STATE — wings angled inward at the "displayed altarpiece" pose */
-.tp--left  { transform-origin: right center; transform: rotateY(-16deg); }
-.tp--right { transform-origin: left center;  transform: rotateY( 16deg); }
+/* OPEN STATE — wings angled slightly forward at the "displayed altarpiece" pose
+   (positive for left, negative for right) so close is a continuous forward swing. */
+.tp--left  { transform-origin: right center; transform: rotateY( 16deg); cursor: grab; touch-action: none; }
+.tp--right { transform-origin: left center;  transform: rotateY(-16deg); cursor: grab; touch-action: none; }
 
-/* CLOSED STATE — wings folded over the center, back faces visible.
-   132° (not 180°) so the wings don't overlap each other awkwardly
-   given that our square wings are wider than classical wings would be. */
-[data-triptych-state="closed"] .tp--left  { transform: rotateY(-132deg); }
-[data-triptych-state="closed"] .tp--right { transform: rotateY( 132deg); }
+/* CLOSED STATE — wings fold FORWARD over the center (positive Z),
+   back faces toward the viewer. 132° so they meet without overlap. */
+[data-triptych-state="closed"] .tp--left  { transform: rotateY( 132deg); }
+[data-triptych-state="closed"] .tp--right { transform: rotateY(-132deg); }
+
+/* During drag, suppress the transition so the wing follows the pointer */
+html.is-dragging,
+html.is-dragging * { user-select: none; cursor: grabbing !important; }
+html.is-dragging .tp { transition: none !important; }
 
 /* FACES — wings have two; center is single-faced */
 .tp__face {
@@ -364,7 +383,7 @@ a:hover, a:focus-visible {
   line-height: 0.82;
   letter-spacing: -0.05em;
   margin: 0;
-  color: var(--paper);
+  color: var(--ink);
 }
 .triptych__title {
   font-family: var(--font-mono);
@@ -372,15 +391,15 @@ a:hover, a:focus-visible {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   margin: -4px 0 0;
-  color: var(--paper);
+  color: var(--ink);
 }
 .triptych__title em {
   font-style: italic;
-  opacity: 0.86;
+  opacity: 0.78;
   text-transform: none;
   letter-spacing: 0.02em;
 }
-.triptych__title span { opacity: 0.5; margin: 0 4px; }
+.triptych__title span { opacity: 0.4; margin: 0 4px; }
 .triptych__predella {
   font-family: var(--font-mono);
   font-size: clamp(12px, 1.05vw, 14px);
@@ -388,23 +407,23 @@ a:hover, a:focus-visible {
   letter-spacing: 0.02em;
   margin: 0;
   max-width: 56ch;
-  color: var(--paper);
+  color: var(--ink);
   opacity: 0.86;
 }
 .triptych__predella em { font-style: italic; }
-.triptych__predella span { opacity: 0.5; margin: 0 4px; }
+.triptych__predella span { opacity: 0.4; margin: 0 4px; }
 .triptych__facts {
   list-style: none;
   padding: 14px 24px 0;
   margin: 6px 0 0;
-  border-top: 1px solid var(--paper);
+  border-top: 1px solid var(--ink);
   display: grid;
   gap: 4px;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--paper);
+  color: var(--ink);
 }
 
 /* =========================================================
@@ -542,6 +561,30 @@ main {
 }
 
 /* =========================================================
+   CENTERPIECE — full-width ink panel for panel ii
+   ========================================================= */
+.centerpiece { margin: var(--void) 0 0; }
+.centerpiece__h {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(26px, 4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  color: var(--ink);
+  max-width: 22ch;
+}
+.centerpiece__sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  margin: 0 0 26px;
+  max-width: 56ch;
+  color: var(--ink);
+}
+.oneone--center { max-width: none; }
+
+/* =========================================================
    COMPANIONS — two ink panels on salmon
    ========================================================= */
 .companions { margin: var(--void) 0 0; }
@@ -586,7 +629,7 @@ main {
   height: 100%;
   object-fit: cover;
 }
-/* mirrors .hero__card-top — keeps the three pieces visually unified */
+/* mirrors the triptych panel labels — keeps the deep-dive cards visually unified */
 .oneone__top {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -704,12 +747,12 @@ main {
 .foot p { margin: 0; }
 
 /* =========================================================
-   MOTION TOGGLE
+   PERSISTENT TOGGLES — motion, fold
    ========================================================= */
-.motion-toggle {
+.motion-toggle,
+.fold-toggle {
   position: fixed;
   right: 12px;
-  bottom: 12px;
   z-index: 6;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -722,13 +765,19 @@ main {
   border: var(--b);
   cursor: pointer;
 }
+.motion-toggle { bottom: 12px; }
+.fold-toggle  { bottom: 64px; }
+
 .motion-toggle__off { display: none; }
 .motion-toggle[aria-pressed="true"] .motion-toggle__on { display: none; }
 .motion-toggle[aria-pressed="true"] .motion-toggle__off { display: inline; }
-.motion-toggle:hover {
-  background: var(--ink);
-  color: var(--paper);
-}
+.motion-toggle:hover { background: var(--ink); color: var(--paper); }
+
+/* fold-toggle: aria-pressed=true means triptych is open → label reads "fold" */
+.fold-toggle__b { display: none; }
+.fold-toggle[aria-pressed="false"] .fold-toggle__a { display: none; }
+.fold-toggle[aria-pressed="false"] .fold-toggle__b { display: inline; }
+.fold-toggle:hover { background: var(--ink); color: var(--paper); }
 
 /* =========================================================
    RESPONSIVE
@@ -739,10 +788,6 @@ main {
   .triptych__stage { gap: 6px; min-height: clamp(200px, 38vh, 320px); }
   .tp { width: clamp(120px, 25vw, 240px); }
   .tp--center { width: clamp(160px, 32vw, 300px); }
-  .tp--left  { transform: rotateY(-12deg); }
-  .tp--right { transform: rotateY( 12deg); }
-  [data-triptych-state="closed"] .tp--left  { transform: rotateY(-118deg); }
-  [data-triptych-state="closed"] .tp--right { transform: rotateY( 118deg); }
   .tp__label { font-size: 9.5px; padding: 4px 7px; gap: 6px; }
   .tp__label--center { font-size: 10px; padding: 5px 9px; }
 
@@ -750,7 +795,8 @@ main {
   .prints { grid-template-columns: 1fr 1fr; }
   .prints__cell:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
   .raffle { padding: 32px 26px; box-shadow: 8px 8px 0 var(--ink); }
-  .oneone { box-shadow: 8px 8px 0 var(--ink); }
+  .oneone,
+  .oneone--center { box-shadow: 8px 8px 0 var(--ink); }
   .links__list { box-shadow: 8px 8px 0 var(--ink); }
 }
 
@@ -762,10 +808,6 @@ main {
   .triptych__stage { gap: 4px; perspective: 1600px; min-height: clamp(180px, 36vh, 260px); }
   .tp { width: 26vw; }
   .tp--center { width: 34vw; }
-  .tp--left  { transform: rotateY(-8deg); }
-  .tp--right { transform: rotateY( 8deg); }
-  [data-triptych-state="closed"] .tp--left  { transform: rotateY(-104deg); }
-  [data-triptych-state="closed"] .tp--right { transform: rotateY( 104deg); }
   .tp__label { font-size: 8.5px; padding: 3px 6px; gap: 5px; bottom: 6px; left: 6px; }
   .tp__label--center { font-size: 9.5px; padding: 4px 7px; }
   .tp__cover-no { font-size: clamp(40px, 11vw, 80px); }
@@ -781,12 +823,14 @@ main {
   .raffle__steps li { grid-template-columns: 50px 1fr; padding: 12px 14px; }
   .prints { grid-template-columns: 1fr; }
   .prints__cell:nth-child(3) { grid-column: auto; aspect-ratio: 1 / 1; }
-  .oneone { box-shadow: 6px 6px 0 var(--ink); }
+  .oneone,
+  .oneone--center { box-shadow: 6px 6px 0 var(--ink); }
   .links__list { box-shadow: 6px 6px 0 var(--ink); }
 }
 
 /* =========================================================
    REDUCED MOTION + manual toggle
+   Disable the unfold animation; swap videos for poster stills.
    ========================================================= */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -794,63 +838,89 @@ main {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .hero__bg { display: none; }
-  .hero { background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat; }
-  .hero__card-media video { display: none; }
-  .hero__card-media {
-    background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
-  }
-  .oneone video { display: none; }
-  .oneone:nth-of-type(1) .oneone__media {
+  .tp { transition: none !important; }
+  .tp video { display: none; }
+  .tp--left .tp__face--front {
     background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
   }
-  .oneone:nth-of-type(2) .oneone__media {
+  .tp--center .tp__media {
+    background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+  }
+  .tp--right .tp__face--front {
+    background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
+  }
+  .oneone video { display: none; }
+  .oneone--center .oneone__media {
+    background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+  }
+  .companions__pair .oneone:nth-of-type(1) .oneone__media {
+    background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
+  }
+  .companions__pair .oneone:nth-of-type(2) .oneone__media {
     background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
   }
 }
 
-body[data-motion="off"] .hero__bg { display: none; }
-body[data-motion="off"] .hero {
-  background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
-}
-body[data-motion="off"] .hero__card-media video { display: none; }
-body[data-motion="off"] .hero__card-media {
-  background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
-}
-body[data-motion="off"] .oneone video { display: none; }
-body[data-motion="off"] .oneone:nth-of-type(1) .oneone__media {
+body[data-motion="off"] .tp { transition: none !important; }
+body[data-motion="off"] .tp video { display: none; }
+body[data-motion="off"] .tp--left .tp__face--front {
   background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
 }
-body[data-motion="off"] .oneone:nth-of-type(2) .oneone__media {
+body[data-motion="off"] .tp--center .tp__media {
+  background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .tp--right .tp__face--front {
+  background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .oneone video { display: none; }
+body[data-motion="off"] .oneone--center .oneone__media {
+  background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .companions__pair .oneone:nth-of-type(1) .oneone__media {
+  background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .companions__pair .oneone:nth-of-type(2) .oneone__media {
   background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
 }
 
 /* =========================================================
-   PRINT
+   PRINT — flatten the 3D, ink-on-paper
    ========================================================= */
 @media print {
-  .motion-toggle, .hero__chrome, .hero__bg, .hero::before, .hero::after { display: none !important; }
+  .motion-toggle, .fold-toggle, .hero__chrome, .hero__bg,
+  .hero::before, .hero::after { display: none !important; }
   body { background: #fff; color: #000; }
   a { color: #000; }
   .hero {
-    height: auto; min-height: 0;
+    min-height: 0;
     background: #fff;
+    padding: 0;
     page-break-after: always;
   }
-  .hero__card {
-    position: static;
-    transform: none;
-    width: 100%;
-    grid-template-columns: 1fr;
-    background: #fff;
-    color: #000;
-    border: 2px solid #000;
-    box-shadow: none;
+  .triptych { padding: 0; gap: 16px; }
+  .triptych__stage {
+    perspective: none;
+    transform-style: flat;
+    min-height: 0;
+    gap: 8px;
   }
-  .hero__wordmark, .hero__tag, .hero__facts, .hero__card-top,
-  .hero__scene, .hero__predella { color: #000; }
-  .hero__facts { border-color: #000; }
-  .hero__card-top { border-color: #000; }
+  .tp,
+  .tp--left, .tp--right { transform: none !important; }
+  .tp__face--back { display: none; }
+  .tp__face, .tp--center .tp__media {
+    background: #fff;
+    border-color: #000;
+  }
+  .tp__label { background: #fff; color: #000; border-color: #000; }
+  .tp__no { border-right-color: #000; }
+  .triptych__wordmark,
+  .triptych__title,
+  .triptych__predella,
+  .triptych__facts { color: #000; }
+  .triptych__title em,
+  .triptych__predella { opacity: 1; }
+  .triptych__facts { border-top-color: #000; }
+
   .raffle, .oneone, .links__list { box-shadow: none; }
   .raffle { background: #fff; color: #000; border: 2px solid #000; }
   .raffle__bigword { background: #000; color: #fff; }
@@ -862,5 +932,6 @@ body[data-motion="off"] .oneone:nth-of-type(2) .oneone__media {
   .oneone__title, .oneone__meta, .oneone__top, .oneone__predella { color: #000; }
   .oneone__top { border-bottom-color: #000; }
   .oneone__media { border-bottom-color: #000; }
-  .companions__sub { color: #000; }
+  .companions__sub,
+  .centerpiece__sub { color: #000; }
 }

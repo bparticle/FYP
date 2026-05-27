@@ -18,22 +18,31 @@
   <meta property="og:image" content="./public/media/fyp-poster.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="FYP Triptych — Sirius Crocodile" />
-  <meta name="twitter:description" content="An altarpiece for the algorithm. I. Supplicant · II. Altar · III. Possession. Objkt One. NFC Lisbon, June 2026." />
+  <meta name="twitter:description"
+    content="An altarpiece for the algorithm. I. Supplicant · II. Altar · III. Possession. Objkt One. NFC Lisbon, June 2026." />
   <meta name="twitter:image" content="./public/media/fyp-poster.jpg" />
 
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
   <link rel="stylesheet" href="./style.css" />
 
-  <!-- Set triptych state synchronously to avoid FOUC. If motion is enabled,
-       page renders in 'closed' state first; main script transitions to 'open'. -->
+  <!-- Triptych state — self-contained so it works even if script.js fails:
+       sets initial state pre-paint (no FOUC) and schedules the unfold. -->
   <script>
-  (function(){
-    var pr=false; try{pr=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
-    var ms=null; try{ms=localStorage.getItem('fyp.motion')}catch(e){}
-    var off=ms==='off'||(ms==null&&pr);
-    document.documentElement.dataset.triptychState=off?'open':'closed';
-  })();
+    (function () {
+      var html = document.documentElement;
+      var pr = false; try { pr = matchMedia('(prefers-reduced-motion: reduce)').matches } catch (e) { }
+      var ms = null; try { ms = localStorage.getItem('fyp.motion') } catch (e) { }
+      var off = ms === 'off' || (ms == null && pr);
+      if (off) { html.dataset.triptychState = 'open'; return; }
+      html.dataset.triptychState = 'closed';
+      var unfold = function () { html.dataset.triptychState = 'open'; };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(unfold, 650); }, { once: true });
+      } else {
+        setTimeout(unfold, 650);
+      }
+    })();
   </script>
 </head>
 
@@ -43,6 +52,10 @@
 
   <!-- ============ HERO — the triptych, hinged panels that unfold on load ============ -->
   <section class="hero" id="piece" aria-labelledby="hero-title">
+
+    <!-- Atmospheric backdrop — static still, washed -->
+    <img class="hero__bg" src="./public/media/fyp-static.png" alt="" width="1280" height="1280"
+      decoding="async" fetchpriority="high" aria-hidden="true" />
 
     <div class="hero__chrome">
       <span class="hero__id">
@@ -55,7 +68,8 @@
       </span>
       <nav class="hero__nav" aria-label="In-page">
         <a href="#raffle">raffle</a>
-        <a href="#companions">panels</a>
+        <a href="#centerpiece">altar</a>
+        <a href="#companions">wings</a>
         <a href="#links">links</a>
       </nav>
     </div>
@@ -67,8 +81,8 @@
         <!-- LEFT WING — Panel I -->
         <article class="tp tp--left" aria-label="Panel I — Supplicant">
           <div class="tp__face tp__face--front">
-            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg"
-              autoplay loop muted playsinline preload="metadata"
+            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
+              playsinline preload="metadata"
               aria-label="Panel I — Supplicant. Figure with phone, hearts and tears."></video>
             <div class="tp__label">
               <span class="tp__no">I</span>
@@ -89,8 +103,7 @@
         <!-- CENTER — Panel II -->
         <article class="tp tp--center" aria-label="Panel II — Altar, the center">
           <div class="tp__media">
-            <video poster="./public/media/fyp-poster.jpg"
-              autoplay loop muted playsinline preload="metadata"
+            <video poster="./public/media/fyp-poster.jpg" autoplay loop muted playsinline preload="metadata"
               aria-label="Panel II — Altar. Two figures plugged in, souls leaving through the cable.">
               <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
               <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
@@ -105,8 +118,8 @@
         <!-- RIGHT WING — Panel III -->
         <article class="tp tp--right" aria-label="Panel III — Possession">
           <div class="tp__face tp__face--front">
-            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg"
-              autoplay loop muted playsinline preload="metadata"
+            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
+              playsinline preload="metadata"
               aria-label="Panel III — Possession. Hollow profile holding a tablet showing a feed."></video>
             <div class="tp__label">
               <span class="tp__no">III</span>
@@ -129,8 +142,10 @@
       <!-- Museum plaque beneath the work -->
       <div class="triptych__plaque">
         <h1 id="hero-title" class="triptych__wordmark" aria-label="FYP">FYP</h1>
-        <p class="triptych__title">the FYP triptych <span aria-hidden="true">—</span> <em>an altarpiece for the algorithm</em></p>
-        <p class="triptych__predella">II. Altar <span aria-hidden="true">—</span> <em>the altar of the algorithm. souls offered up through the cable.</em></p>
+        <p class="triptych__title">the FYP triptych <span aria-hidden="true">—</span> <em>an altarpiece for the
+            algorithm</em></p>
+        <p class="triptych__predella">II. Altar <span aria-hidden="true">—</span> <em>the altar of the algorithm. </em>
+        </p>
         <ul class="triptych__facts">
           <li>open edition &middot; tezos &middot; closes when it closes</li>
           <li>objkt one curation &middot; nfc lisbon, jun 2026</li>
@@ -168,6 +183,30 @@
       <p class="raffle__fineprint">one entry per held edition. shipped worldwide.</p>
     </section>
 
+    <!-- ============ THE CENTERPIECE — panel ii ============ -->
+    <section class="centerpiece" id="centerpiece" aria-labelledby="centerpiece-title">
+      <h2 id="centerpiece-title" class="centerpiece__h">the centerpiece.</h2>
+      <p class="centerpiece__sub">ii. altar — the open edition center of the fyp triptych.</p>
+
+      <article class="oneone oneone--center" aria-labelledby="centerpiece-altar-title">
+        <div class="oneone__media">
+          <video poster="./public/media/fyp-poster.jpg" autoplay loop muted playsinline preload="metadata"
+            aria-label="Panel II — two figures plugged in.">
+            <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+            <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="oneone__top">
+          <span><b>PANEL&nbsp;II</b> &middot; CENTER</span>
+          <span>OPEN&nbsp;EDITION</span>
+        </div>
+        <h3 id="centerpiece-altar-title" class="oneone__title">II. Altar</h3>
+        <p class="oneone__predella"><em>Plugged into the altar of the algorithm.</em></p>
+        <p class="oneone__meta">FYP &middot; tezos &middot; open edition &middot; <a href="https://objkt.com"
+            target="_blank" rel="noopener">mint on objkt</a></p>
+      </article>
+    </section>
+
     <!-- ============ THE WINGS — panels i & iii ============ -->
     <section class="companions" id="companions" aria-labelledby="companions-title">
       <h2 id="companions-title" class="companions__h">the wings.</h2>
@@ -185,7 +224,8 @@
           </div>
           <h3 id="oneone1-title" class="oneone__title">I. Supplicant</h3>
           <p class="oneone__predella"><em>tears given, hearts offered. the daily liturgy of the timeline.</em></p>
-          <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
+          <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a href="https://objkt.com" target="_blank"
+              rel="noopener">list on objkt</a></p>
         </article>
 
         <article class="oneone" aria-labelledby="oneone2-title">
@@ -200,7 +240,8 @@
           </div>
           <h3 id="oneone2-title" class="oneone__title">III. Possession</h3>
           <p class="oneone__predella"><em>the wraith remains. the feed continues. hands no longer still.</em></p>
-          <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a href="https://objkt.com" target="_blank" rel="noopener">list on objkt</a></p>
+          <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a href="https://objkt.com" target="_blank"
+              rel="noopener">list on objkt</a></p>
         </article>
       </div>
     </section>

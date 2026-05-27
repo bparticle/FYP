@@ -72,9 +72,8 @@ VP9 CRF 35 for WebM, Lanczos downscale. Re-run whenever you replace files in
   blush `#F7D9D2`, ink `#050505`, off-white `#FFFDFC`, cool grey `#C8C8C3`,
   magenta `#ED276C` / `#FF2D95`, lime `#AEEA00` / `#8ACE00`. Functional default
   link blue `#0000EE` is kept as the only anti-design accent.
-- **Background** is a zoom-cropped autoplay of `fyp-static1-web.webm/.mp4`,
-  muted, looping, with `playsinline`. A blush veil sits over it so foreground
-  text stays legible.
+- **Background** is a zoom-cropped still (`fyp-static.png`, from `raw/FYP_static.png`).
+  A blush veil sits over it so foreground text stays legible.
 - **Hard borders, hard 6px offset shadows, no rounded corners, no glassmorphism,
   no soft gradients.** Bimodal whitespace.
 - **Companion 1/1s** each get their own colored panel — magenta for #1, lime
@@ -84,9 +83,8 @@ VP9 CRF 35 for WebM, Lanczos downscale. Re-run whenever you replace files in
 
 ## Accessibility & responsive
 
-- Respects `prefers-reduced-motion`: replaces the background video with the
-  static poster, disables the marquee, swaps companion videos for their poster
-  images.
+- Respects `prefers-reduced-motion`: disables the triptych unfold animation and
+  swaps panel videos for their poster images.
 - A persistent **"motion: on/off"** button (bottom-right) lets users toggle
   motion themselves; choice is stored in `localStorage`.
 - All interactive targets are ≥ 44 px or padded to meet it.
