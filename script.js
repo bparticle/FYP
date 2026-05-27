@@ -46,9 +46,13 @@
   const leftWing = triptych?.querySelector('.tp--left');
   const rightWing = triptych?.querySelector('.tp--right');
 
-  // OPEN and CLOSED angles must match the CSS for the current breakpoint.
-  // We compute them from the actual computed style at idle (CSS rule applies).
-  const angles = { openLeft: 16, openRight: -16, closedLeft: 132, closedRight: -132 };
+  // OPEN and CLOSED angles must match the CSS custom properties per breakpoint.
+  const readAngles = () => {
+    const root = getComputedStyle(html);
+    const open = parseFloat(root.getPropertyValue('--tp-open')) || 16;
+    const closed = parseFloat(root.getPropertyValue('--tp-closed')) || 132;
+    return { openLeft: open, openRight: -open, closedLeft: closed, closedRight: -closed };
+  };
 
   // Sync the fold toggle's aria-pressed with the current state
   const syncFold = () => {
@@ -76,6 +80,7 @@
 
     const applyProgress = (p) => {
       // p: 0 = open, 1 = closed
+      const angles = readAngles();
       const left  = interp(angles.openLeft,  angles.closedLeft,  p);
       const right = interp(angles.openRight, angles.closedRight, p);
       leftWing.style.transform  = `rotateY(${left.toFixed(2)}deg)`;
