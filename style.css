@@ -315,6 +315,35 @@ html.is-dragging .tp { transition: none !important; }
   letter-spacing: 0.08em;
 }
 
+/* Edition rarity pill — top corner, opposite the panel label */
+.tp__pill {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--paper);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.tp__pill--center {
+  bottom: 14px;
+  right: 14px;
+  padding: 5px 11px;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+}
+
 /* Back-face cover plate — the closed altarpiece face */
 .tp__cover {
   position: absolute;
@@ -808,6 +837,8 @@ main {
   .tp--right { margin-left:  clamp(-24px, -4vw, -10px); z-index: 1; }
   .tp__label { font-size: 9.5px; padding: 4px 7px; gap: 6px; }
   .tp__label--center { font-size: 10px; padding: 5px 9px; }
+  .tp__pill { top: 8px; right: 8px; font-size: 8px; padding: 3px 7px; }
+  .tp__pill--center { top: 10px; right: 10px; font-size: 8.5px; padding: 4px 8px; }
 }
 
 @media (max-width: 900px) {
@@ -912,6 +943,8 @@ main {
 
   .tp__label { font-size: 9.5px; padding: 4px 8px; gap: 6px; bottom: 8px; left: 8px; }
   .tp__label--center { font-size: 10.5px; padding: 6px 10px; bottom: 12px; left: 12px; }
+  .tp__pill { top: 7px; right: 7px; font-size: 7.5px; padding: 3px 6px; letter-spacing: 0.1em; }
+  .tp__pill--center { top: 10px; right: 10px; font-size: 8px; padding: 4px 8px; }
   .tp__cover-no { font-size: clamp(44px, 12vw, 88px); }
   .tp__cover-name { font-size: 10px; letter-spacing: 0.16em; }
   .tp__cover-tag { font-size: 8.5px; bottom: 10px; }
@@ -1060,6 +1093,7 @@ body[data-motion="off"] .companions__pair .oneone:nth-of-type(2) .oneone__media 
     border-color: #000;
   }
   .tp__label { background: #fff; color: #000; border-color: #000; }
+  .tp__pill { background: #000; color: #fff; border-color: #000; }
   .tp__no { border-right-color: #000; }
   .triptych__wordmark,
   .triptych__title,
