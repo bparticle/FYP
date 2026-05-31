@@ -58,6 +58,17 @@ encode_physical_photo() {
     "$output"
 }
 
+# Gallery object photo — preserves aspect ratio (no square crop) and emits
+# both a WebP and a JPEG fallback. Width-bound; height is auto (even).
+encode_object_photo() {
+  local input="$1" outbase="$2" width="$3"
+  local vf="scale=${width}:-2:flags=lanczos"
+  ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "$vf" \
+    -c:v libwebp -quality 84 "${outbase}.webp"
+  ffmpeg -hide_banner -loglevel error -y -i "$input" -vf "$vf" \
+    -q:v 3 "${outbase}.jpg"
+}
+
 require_ffmpeg
 mkdir -p "$OUT"
 
@@ -106,5 +117,26 @@ encode_physical_photos() {
 }
 
 encode_physical_photos
+
+# White-box gallery shots of the physical triptych — aspect preserved, webp + jpg.
+encode_object_photos() {
+  local triples=(
+    "OPEN_front.png:fyp-object-open:1536"
+    "CLOSED_front.png:fyp-object-closed:1200"
+    "HALF-OPEN_front.png:fyp-object-halfopen:1200"
+    "CLOSED_hand.png:fyp-object-hand:1000"
+  )
+  for t in "${triples[@]}"; do
+    local input="$RAW/${t%%:*}"
+    local rest="${t#*:}"
+    local base="${rest%%:*}"
+    local width="${rest##*:}"
+    [[ -f "$input" ]] || { echo "Skipping missing $input" >&2; continue; }
+    echo "Encoding ${t%%:*} ..."
+    encode_object_photo "$input" "$OUT/$base" "$width"
+  done
+}
+
+encode_object_photos
 
 echo "Done. Outputs written to public/media/"

@@ -24,7 +24,7 @@
 
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
-  <link rel="stylesheet" href="./style.css?v=5" />
+  <link rel="stylesheet" href="./style.css?v=6" />
 
   <!-- Triptych state — self-contained so it works even if script.js fails:
        sets initial state pre-paint (no FOUC) and schedules the unfold. -->
@@ -67,9 +67,10 @@
         <span class="hero__id-text">FYP&nbsp;TRIPTYCH</span>
       </span>
       <nav class="hero__nav" aria-label="In-page">
-        <a href="#raffle">raffle</a>
+        <a href="#object">object</a>
         <a href="#centerpiece">altar</a>
         <a href="#companions">wings</a>
+        <a href="#raffle">raffle</a>
         <a href="#links">links</a>
       </nav>
     </div>
@@ -162,40 +163,93 @@
 
   <main id="main">
 
-    <!-- ============ RAFFLE — inverted, the punch ============ -->
-    <section class="raffle" id="raffle" aria-labelledby="raffle-title">
-      <h2 id="raffle-title" class="raffle__h">
-        Physical raffle
-      </h2>
+    <!-- ============ THE OBJECT — physical triptych, white-box gallery.
+         Highest tier in the package — placed first so it reads as the headline reward. ============ -->
+    <section class="object" id="object" aria-labelledby="object-title">
 
-      <ol class="raffle__steps" aria-label="how the raffle works">
-        <li><b>01</b> mint the open edition on <a href="https://objkt.com" target="_blank" rel="noopener">objkt</a>.
-        </li>
-        <li><b>02</b> hold the piece through the snapshot.</li>
-        <li><b>03</b> 3D printed collectibles are raffled among holders.</li>
-      </ol>
+      <div class="object__head">
+        <p class="object__eyebrow">Holder's reward <span aria-hidden="true">·</span> the complete set</p>
+        <h2 id="object-title" class="object__h">The object.</h2>
+        <p class="object__lede">A hand-held altarpiece — 3D printed and finished by hand. Awarded in full to the
+          single collector who holds all three panels of the FYP triptych:
+          <em>I. Supplicant</em>, <em>II. Altar</em>, and <em>III. Possession</em>.</p>
+      </div>
 
-      <figure class="prints" aria-label="3D printed collectibles">
-        <div class="prints__cell">
-          <img src="./public/media/physical-card.jpg" alt="3D printed collectible — front" width="900" height="900"
-            loading="lazy" decoding="async" />
-          <span class="prints__label">C01</span>
-        </div>
-        <div class="prints__cell">
-          <img src="./public/media/physical-card-backing.jpg" alt="3D printed collectible with backing board"
-            width="900" height="900" loading="lazy" decoding="async" />
-
-          <span class="prints__label">C02</span>
-        </div>
-        <div class="prints__cell">
-          <img src="./public/media/physical-close-up.jpg" alt="3D printed collectible — close-up detail" width="900"
-            height="900" loading="lazy" decoding="async" />
-          <span class="prints__label">C03</span>
-        </div>
-        <figcaption class="prints__cap">3D printed collectibles, raffled to holders.</figcaption>
+      <!-- Hero plate — the open altarpiece, floating in the white room -->
+      <figure class="object__hero">
+        <picture>
+          <source srcset="./public/media/fyp-object-open.webp" type="image/webp" />
+          <img src="./public/media/fyp-object-open.jpg" width="1536" height="1024" loading="lazy" decoding="async"
+            alt="The physical FYP triptych, fully unfolded — three hinged panels: I. Supplicant, II. Altar, III. Possession." />
+        </picture>
+        <figcaption class="object__plate">
+          <span class="object__plate-row"><b>Sirius Crocodile</b> <span aria-hidden="true">—</span> <em>the FYP
+              triptych</em>, mmxxvi</span>
+          <span class="object__plate-row">3D printed &middot; finished by hand &middot; three hinged panels, each
+            NFC-tagged</span>
+          <span class="object__plate-row">edition of one &middot; awarded to the holder of the complete set</span>
+        </figcaption>
       </figure>
 
-      <p class="raffle__fineprint">one entry per held edition. shipped worldwide at cost.</p>
+      <!-- The closed object and the fold -->
+      <div class="object__pair">
+        <figure class="object__cell">
+          <picture>
+            <source srcset="./public/media/fyp-object-closed.webp" type="image/webp" />
+            <img src="./public/media/fyp-object-closed.jpg" width="1200" height="800" loading="lazy" decoding="async"
+              alt="The FYP triptych closed — cover lettered FYP TRIPTYCH by Sirius Crocodile, panel titles down the spine." />
+          </picture>
+          <figcaption><span class="object__no">i</span> closed <span aria-hidden="true">—</span> cover &amp; colophon</figcaption>
+        </figure>
+        <figure class="object__cell">
+          <picture>
+            <source srcset="./public/media/fyp-object-halfopen.webp" type="image/webp" />
+            <img src="./public/media/fyp-object-halfopen.jpg" width="1200" height="864" loading="lazy" decoding="async"
+              alt="The FYP triptych half-open — hand-lettered predella text inside the cover beside panel III. Possession." />
+          </picture>
+          <figcaption><span class="object__no">ii</span> the fold <span aria-hidden="true">—</span> hand-lettered predella</figcaption>
+        </figure>
+      </div>
+
+      <!-- The hand-held detail + how to acquire -->
+      <div class="object__detail">
+        <figure class="object__detail-media">
+          <picture>
+            <source srcset="./public/media/fyp-object-hand.webp" type="image/webp" />
+            <img src="./public/media/fyp-object-hand.jpg" width="1000" height="1502" loading="lazy" decoding="async"
+              alt="The closed FYP triptych held in a hand, showing its palm scale." />
+          </picture>
+          <figcaption><span class="object__no">iii</span> in hand <span aria-hidden="true">—</span> palm scale</figcaption>
+        </figure>
+
+        <div class="object__detail-copy">
+          <div class="object__note">
+            <h3 class="object__note-h">Three panels, three tags</h3>
+            <p>Each panel of the altarpiece carries its own NFC tag. Tap a panel and it opens the collectible — the object in your hand and the work on-chain, bound one to one.</p>
+            <ul class="object__map" aria-label="panel to collectible">
+              <li><span class="object__map-no">I</span> Supplicant <span class="object__map-arrow"
+                  aria-hidden="true">→</span> <span class="object__map-ed">1 / 1</span></li>
+              <li><span class="object__map-no">II</span> Altar <span class="object__map-arrow"
+                  aria-hidden="true">→</span> <span class="object__map-ed">open ed.</span></li>
+              <li><span class="object__map-no">III</span> Possession <span class="object__map-arrow"
+                  aria-hidden="true">→</span> <span class="object__map-ed">1 / 25</span></li>
+            </ul>
+          </div>
+
+          <div class="object__note">
+            <h3 class="object__note-h">How to pick up the pieces</h3>
+            <ol class="object__steps">
+              <li><b>01</b> win the auction <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/8"
+                  target="_blank" rel="noopener">I. Supplicant</a></li>
+              <li><b>02</b> mint 1/∞ <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9"
+                  target="_blank" rel="noopener">II. Altar</a></li>
+              <li><b>03</b> mint 1/25 <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/10"
+                  target="_blank" rel="noopener">III. Possession</a></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ============ THE CENTERPIECE — panel ii ============ -->
@@ -264,6 +318,55 @@
               rel="noopener">objkt</a></p>
         </article>
       </div>
+    </section>
+
+    <!-- ============ PHYSICAL RAFFLE — same white-box gallery as the object ============ -->
+    <section class="object object--raffle" id="raffle" aria-labelledby="raffle-title">
+
+      <div class="object__head">
+        <p class="object__eyebrow">Holder's reward <span aria-hidden="true">·</span> open edition</p>
+        <h2 id="raffle-title" class="object__h">Physical raffle.</h2>
+        <p class="object__lede">Mint <em>II. Altar</em>, hold through the snapshot, and enter the draw for 3D printed
+          collectibles — hand-finished pieces raffled among holders of the open edition.</p>
+      </div>
+
+      <div class="object__prints" aria-label="3D printed collectibles">
+        <figure class="object__cell">
+          <img src="./public/media/physical-card.jpg" alt="3D printed collectible — front" width="900" height="900"
+            loading="lazy" decoding="async" />
+          <figcaption><span class="object__no">i</span> front</figcaption>
+        </figure>
+        <figure class="object__cell">
+          <img src="./public/media/physical-card-backing.jpg" alt="3D printed collectible with backing board"
+            width="900" height="900" loading="lazy" decoding="async" />
+          <figcaption><span class="object__no">ii</span> backing</figcaption>
+        </figure>
+        <figure class="object__cell">
+          <img src="./public/media/physical-close-up.jpg" alt="3D printed collectible — close-up detail" width="900"
+            height="900" loading="lazy" decoding="async" />
+          <figcaption><span class="object__no">iii</span> detail</figcaption>
+        </figure>
+      </div>
+
+      <div class="object__plate object__plate--center">
+        <span class="object__plate-row">3D printed collectibles &middot; raffled to holders</span>
+        <span class="object__plate-row">one entry per held edition &middot; shipped worldwide at cost</span>
+      </div>
+
+      <div class="object__detail object__detail--solo">
+        <div class="object__detail-copy">
+          <div class="object__note">
+            <h3 class="object__note-h">How the raffle works</h3>
+            <ol class="object__steps" aria-label="how the raffle works">
+              <li><b>01</b> mint the open edition on <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9"
+                  target="_blank" rel="noopener">II. Altar</a> on objkt</li>
+              <li><b>02</b> hold the piece through the snapshot</li>
+              <li><b>03</b> 3D printed collectibles are raffled among holders</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ============ LINKS ============ -->

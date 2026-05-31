@@ -470,131 +470,6 @@ main {
 }
 
 /* =========================================================
-   RAFFLE — ink panel, white type, mono brutalist
-   ========================================================= */
-.raffle {
-  margin: var(--void) 0 0;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 44px 36px 36px;
-  box-shadow: 14px 14px 0 var(--ink);
-}
-.raffle__h {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: clamp(28px, 4.4vw, 56px);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  margin: 0 0 32px;
-  color: var(--paper);
-  max-width: 22ch;
-}
-.raffle__bigword {
-  display: inline-block;
-  background: var(--paper);
-  color: var(--ink);
-  padding: 0 10px;
-}
-.raffle__steps {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 36px;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  border: 2px solid var(--paper);
-}
-.raffle__steps li {
-  gap: 14px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--paper);
-  align-items: baseline;
-}
-.raffle__steps li:last-child { border-bottom: 0; }
-.raffle__steps b {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.06em;
-  color: var(--paper);
-}
-.raffle__steps b::after {
-  content: " //";
-  opacity: 0.5;
-}
-.raffle__steps a {
-  color: var(--paper);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.raffle__steps a:hover,
-.raffle__steps a:focus-visible {
-  background: var(--paper);
-  color: var(--ink);
-  outline-color: var(--paper);
-}
-
-/* 3D print contact sheet */
-.prints {
-  margin: 0 0 32px;
-  width: 100%;
-  min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(10px, 1.6vw, 14px);
-}
-.prints__cell {
-  aspect-ratio: 1 / 1;
-  margin: 0;
-  min-width: 0;
-  background: #111;
-  border: 2px solid var(--paper);
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-.prints__cell img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: center;
-}
-.prints__label {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 1;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: var(--paper);
-  background: var(--ink);
-  padding: 4px 7px;
-  border: 1px solid var(--paper);
-  margin: 0;
-  pointer-events: none;
-}
-.prints__cap {
-  grid-column: 1 / -1;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.7);
-  margin: 6px 0 0;
-}
-
-.raffle__fineprint {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  margin: 0;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.3);
-  color: rgba(255,255,255,0.85);
-}
-
-/* =========================================================
    CENTERPIECE — full-width ink panel for panel ii
    ========================================================= */
 .centerpiece { margin: var(--void) 0 0; }
@@ -714,6 +589,263 @@ main {
   background: var(--paper);
   color: var(--ink);
   outline-color: var(--paper);
+}
+
+/* =========================================================
+   THE OBJECT — white-box gallery room for the physical
+   triptych. Full-bleed white band (breaks out of the salmon
+   gutter), ink type, objects float on the wall.
+   ========================================================= */
+.object {
+  margin: var(--void) -4vw 0;
+  padding: clamp(52px, 9vh, 120px) 6vw;
+  background: var(--paper);
+  color: var(--ink);
+  border-top: var(--b);
+  border-bottom: var(--b);
+}
+
+.object__head {
+  max-width: 62ch;
+  margin: 0 auto clamp(40px, 6vh, 76px);
+  text-align: center;
+}
+.object__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+  color: var(--ink);
+  opacity: 0.55;
+}
+.object__eyebrow span { margin: 0 6px; opacity: 0.6; }
+.object__h {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(30px, 5vw, 60px);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin: 0 0 20px;
+  color: var(--ink);
+}
+.object__lede {
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.62;
+  letter-spacing: 0.01em;
+  margin: 0 auto;
+  max-width: 58ch;
+  color: var(--ink);
+  opacity: 0.86;
+}
+.object__lede em { font-style: italic; }
+
+/* Shared plate treatment — a framed print on a white wall */
+.object__hero img,
+.object__cell img,
+.object__detail-media img,
+.object__prints img {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(34, 34, 34, 0.10);
+  box-shadow: 0 30px 60px -38px rgba(34, 34, 34, 0.42);
+}
+
+/* Hero — the open altarpiece, centered */
+.object__hero {
+  max-width: 1040px;
+  margin: 0 auto clamp(40px, 6vh, 72px);
+  text-align: center;
+}
+.object__plate {
+  display: grid;
+  gap: 5px;
+  margin: 24px auto 0;
+  max-width: 60ch;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+.object__plate-row { display: block; }
+.object__plate-row:first-child { font-size: 13px; }
+.object__plate-row:not(:first-child) { opacity: 0.68; }
+.object__plate b { font-weight: 700; letter-spacing: 0.06em; }
+.object__plate em { font-style: italic; }
+.object__plate span[aria-hidden] { opacity: 0.4; margin: 0 2px; }
+
+/* The closed object + the fold — two landscape plates */
+.object__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 44px);
+  max-width: 1040px;
+  margin: 0 auto clamp(44px, 7vh, 84px);
+  align-items: start;
+}
+.object__cell { margin: 0; }
+.object__cell figcaption,
+.object__detail-media figcaption {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.72;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 9px;
+}
+.object__cell figcaption span[aria-hidden],
+.object__detail-media figcaption span[aria-hidden] { opacity: 0.4; }
+.object__no {
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  opacity: 1;
+  padding: 2px 5px;
+  border: 1px solid rgba(34, 34, 34, 0.32);
+}
+
+/* The hand-held detail beside the acquisition copy */
+.object__detail {
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: clamp(28px, 4.5vw, 72px);
+  align-items: center;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.object__detail-media { margin: 0; }
+
+.object__detail-copy {
+  display: grid;
+  gap: clamp(26px, 4vh, 40px);
+}
+.object__note-h {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(15px, 1.6vw, 19px);
+  letter-spacing: 0.02em;
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+  color: var(--ink);
+}
+.object__note p {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  margin: 0;
+  color: var(--ink);
+  opacity: 0.86;
+}
+
+/* panel → collectible map */
+.object__map {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  gap: 0;
+  border: 1px solid rgba(34, 34, 34, 0.18);
+}
+.object__map li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 13px;
+  border-bottom: 1px solid rgba(34, 34, 34, 0.12);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.object__map li:last-child { border-bottom: 0; }
+.object__map-no {
+  font-weight: 700;
+  min-width: 30px;
+  color: var(--ink);
+}
+.object__map-arrow { opacity: 0.4; }
+.object__map-ed {
+  margin-left: auto;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 3px 9px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  border-radius: 999px;
+}
+
+/* acquisition steps — open numbered list (lighter than the map above it,
+   so the two blocks keep a tight/open rhythm instead of twin boxes) */
+.object__steps {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.object__steps li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 2px;
+  border-bottom: 1px solid rgba(34, 34, 34, 0.10);
+  color: var(--ink);
+}
+.object__steps li:last-child { border-bottom: 0; }
+.object__steps b {
+  flex: none;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+}
+.object__steps b::after { content: " //"; opacity: 0.6; }
+.object__ship {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(34, 34, 34, 0.18);
+  color: var(--ink);
+  opacity: 0.8;
+}
+
+/* Physical raffle — reuses the object gallery room */
+.object__prints {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 44px);
+  max-width: 1040px;
+  margin: 0 auto clamp(28px, 5vh, 48px);
+  align-items: start;
+}
+.object__plate--center {
+  text-align: center;
+  margin-bottom: clamp(36px, 6vh, 64px);
+}
+.object__detail--solo {
+  grid-template-columns: 1fr;
+  max-width: 52ch;
+  margin-inline: auto;
+  text-align: center;
+}
+.object__detail--solo .object__note-h {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.object__detail--solo .object__steps {
+  text-align: left;
 }
 
 /* =========================================================
@@ -843,12 +975,15 @@ main {
 
 @media (max-width: 900px) {
   .companions__pair { grid-template-columns: 1fr; }
-  .prints { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .prints__cell:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
-  .raffle { padding: 32px 26px; box-shadow: 8px 8px 0 var(--ink); }
+  .object__prints { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .object__prints .object__cell:nth-child(3) { grid-column: 1 / -1; }
   .oneone,
   .oneone--center { box-shadow: 8px 8px 0 var(--ink); }
   .links__list { box-shadow: 8px 8px 0 var(--ink); }
+
+  /* object: stack the hand-shot above the acquisition copy */
+  .object__detail { grid-template-columns: 1fr; gap: clamp(28px, 5vh, 44px); }
+  .object__detail-media { max-width: 340px; margin: 0 auto; }
 }
 
 /*
@@ -965,13 +1100,17 @@ main {
   .fold-toggle { bottom: 56px; }
   .motion-toggle { bottom: 8px; }
 
-  .raffle { padding: 26px 18px; box-shadow: 6px 6px 0 var(--ink); }
-  .raffle__steps li { grid-template-columns: 50px 1fr; padding: 12px 14px; }
-  .prints { grid-template-columns: minmax(0, 1fr); }
-  .prints__cell:nth-child(3) { grid-column: auto; aspect-ratio: 1 / 1; }
+  .object__prints { grid-template-columns: 1fr; }
+  .object__prints .object__cell:nth-child(3) { grid-column: auto; }
   .oneone,
   .oneone--center { box-shadow: 6px 6px 0 var(--ink); }
   .links__list { box-shadow: 6px 6px 0 var(--ink); }
+
+  /* object: single column gallery on phones */
+  .object { padding: clamp(40px, 7vh, 64px) 7vw; }
+  .object__pair,
+  .object__prints { grid-template-columns: 1fr; gap: clamp(24px, 5vh, 36px); }
+  .object__prints .object__cell:nth-child(3) { grid-column: auto; }
 }
 
 /* short landscape phones — scroll the altarpiece instead of crushing it */
@@ -1103,17 +1242,24 @@ body[data-motion="off"] .companions__pair .oneone:nth-of-type(2) .oneone__media 
   .triptych__predella { opacity: 1; }
   .triptych__facts { border-top-color: #000; }
 
-  .raffle, .oneone, .links__list { box-shadow: none; }
-  .raffle { background: #fff; color: #000; border: 2px solid #000; }
-  .raffle__bigword { background: #000; color: #fff; }
-  .raffle__steps { border-color: #000; }
-  .raffle__steps li { border-bottom-color: #000; }
-  .raffle__fineprint { color: #000; border-top-color: #000; }
-  .prints__cap { color: #000; }
+  .oneone, .links__list { box-shadow: none; }
   .oneone { background: #fff; color: #000; border: 2px solid #000; }
   .oneone__title, .oneone__meta, .oneone__top, .oneone__predella { color: #000; }
   .oneone__top { border-bottom-color: #000; }
   .oneone__media { border-bottom-color: #000; }
   .companions__sub,
   .centerpiece__sub { color: #000; }
+
+  .object { background: #fff; border-color: #000; }
+  .object__head .object__h,
+  .object__eyebrow,
+  .object__lede,
+  .object__plate,
+  .object__note p,
+  .object__ship { color: #000; opacity: 1; }
+  .object__hero img,
+  .object__cell img,
+  .object__detail-media img,
+  .object__prints img { box-shadow: none; border-color: #000; }
+  .object__map-ed { background: #000; color: #fff; }
 }

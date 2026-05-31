@@ -94,6 +94,30 @@ function Encode-PhysicalPhoto {
     )
 }
 
+# Gallery object photo — preserves aspect ratio (no square crop) and emits
+# both a WebP and a JPEG fallback. Width-bound; height is auto (even).
+function Encode-ObjectPhoto {
+    param(
+        [string]$Source,
+        [string]$OutBase,   # path without extension, e.g. public/media/fyp-object-open
+        [int]$Width
+    )
+
+    $vf = "scale=${Width}:-2:flags=lanczos"
+    & ffmpeg @(
+        "-hide_banner", "-loglevel", "error", "-y",
+        "-i", $Source, "-vf", $vf,
+        "-c:v", "libwebp", "-quality", "84",
+        "$OutBase.webp"
+    )
+    & ffmpeg @(
+        "-hide_banner", "-loglevel", "error", "-y",
+        "-i", $Source, "-vf", $vf,
+        "-q:v", "3",
+        "$OutBase.jpg"
+    )
+}
+
 Require-Ffmpeg
 New-Item -ItemType Directory -Force -Path $Out | Out-Null
 
@@ -158,6 +182,26 @@ foreach ($photo in $photos) {
     Write-Host "Encoding $($photo.Raw) ..."
     $photoOut = Join-Path $Out $photo.Out
     Encode-PhysicalPhoto -Source $inputPath -Output $photoOut
+}
+
+# White-box gallery shots of the physical triptych — aspect preserved, webp + jpg.
+$objects = @(
+    @{ Raw = "OPEN_front.png";      Base = "fyp-object-open";     Width = 1536 },
+    @{ Raw = "CLOSED_front.png";    Base = "fyp-object-closed";   Width = 1200 },
+    @{ Raw = "HALF-OPEN_front.png"; Base = "fyp-object-halfopen"; Width = 1200 },
+    @{ Raw = "CLOSED_hand.png";     Base = "fyp-object-hand";     Width = 1000 }
+)
+
+foreach ($obj in $objects) {
+    $inputPath = Join-Path $Raw $obj.Raw
+    if (-not (Test-Path $inputPath)) {
+        Write-Warning "Skipping missing object photo: $inputPath"
+        continue
+    }
+
+    Write-Host "Encoding $($obj.Raw) ..."
+    $outBase = Join-Path $Out $obj.Base
+    Encode-ObjectPhoto -Source $inputPath -OutBase $outBase -Width $obj.Width
 }
 
 Write-Host "Done. Outputs written to public/media/"
