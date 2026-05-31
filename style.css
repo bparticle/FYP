@@ -445,6 +445,46 @@ html.is-dragging .tp { transition: none !important; }
 }
 .triptych__predella em { font-style: italic; }
 .triptych__predella span { opacity: 0.4; margin: 0 4px; }
+
+/* opening date — the one fixed moment in a piece that "closes when it closes".
+   inverted ink plate, sits between the predella and the facts rule. */
+.triptych__opening {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  margin: 8px 0 2px;
+  padding: 14px 26px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border: var(--b-paper);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+.triptych__opening-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  opacity: 0.66;
+  padding-left: 0.34em;        /* optical centering against the wide tracking */
+}
+.triptych__opening-date {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(22px, 3.4vw, 38px);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.triptych__opening-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.66;
+  padding-left: 0.24em;
+}
+.triptych__opening-sub span { opacity: 0.5; margin: 0 1px; }
 .triptych__facts {
   list-style: none;
   padding: 14px 24px 0;
@@ -980,6 +1020,7 @@ main {
   .oneone,
   .oneone--center { box-shadow: 8px 8px 0 var(--ink); }
   .links__list { box-shadow: 8px 8px 0 var(--ink); }
+  .triptych__opening { box-shadow: 5px 5px 0 var(--ink); }
 
   /* object: stack the hand-shot above the acquisition copy */
   .object__detail { grid-template-columns: 1fr; gap: clamp(28px, 5vh, 44px); }
@@ -1105,6 +1146,7 @@ main {
   .oneone,
   .oneone--center { box-shadow: 6px 6px 0 var(--ink); }
   .links__list { box-shadow: 6px 6px 0 var(--ink); }
+  .triptych__opening { box-shadow: 4px 4px 0 var(--ink); padding: 12px 20px 14px; }
 
   /* object: single column gallery on phones */
   .object { padding: clamp(40px, 7vh, 64px) 7vw; }
@@ -1241,6 +1283,12 @@ body[data-motion="off"] .companions__pair .oneone:nth-of-type(2) .oneone__media 
   .triptych__title em,
   .triptych__predella { opacity: 1; }
   .triptych__facts { border-top-color: #000; }
+  .triptych__opening {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    box-shadow: none;
+  }
 
   .oneone, .links__list { box-shadow: none; }
   .oneone { background: #fff; color: #000; border: 2px solid #000; }
