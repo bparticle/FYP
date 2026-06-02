@@ -24,7 +24,23 @@
 
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
-  <link rel="stylesheet" href="./style.css?v=7" />
+  <link rel="stylesheet" href="./style.css?v=9" />
+
+  <!-- 3D object: vendored libraries, no CDN. Import map resolves Three's
+       internal `import ... from 'three'`; GSAP loads as globals. -->
+  <script type="importmap">
+    { "imports": { "three": "./public/vendor/three/three.module.js" } }
+  </script>
+  <script src="./public/vendor/gsap.min.js" defer></script>
+  <script src="./public/vendor/ScrollTrigger.min.js" defer></script>
+  <!-- JS off → show the still image instead of an empty canvas -->
+  <noscript>
+    <style>
+      .stage3d__canvas, .stage3d__cue { display: none !important; }
+      .stage3d__pin { height: auto !important; background: none !important; }
+      .stage3d__fallback { display: block !important; }
+    </style>
+  </noscript>
 
   <!-- Triptych state — self-contained so it works even if script.js fails:
        sets initial state pre-paint (no FOUC) and schedules the unfold. -->
@@ -164,6 +180,28 @@
 
     </div>
 
+  </section>
+
+  <!-- ============ THE OBJECT IN 3D — folded shut below the hero.
+       Scroll scrubs the unfold (right wing, then left); it floats while
+       idle and leans toward the cursor. When fully open the sticky
+       releases and the page scrolls on. Degrades to a still image when
+       WebGL is unavailable or motion is off (see html.no3d). ============ -->
+  <section class="stage3d" id="object3d" aria-labelledby="stage3d-title">
+    <h2 id="stage3d-title" class="stage3d__sr">The triptych in 3D — scroll to unfold</h2>
+    <div class="stage3d__pin">
+      <canvas class="stage3d__canvas" aria-hidden="true"></canvas>
+      <!-- graceful fallback: shown via html.no3d (no WebGL / motion off / JS off) -->
+      <figure class="stage3d__fallback">
+        <picture>
+          <source srcset="./public/media/fyp-object-open.webp" type="image/webp" />
+          <img src="./public/media/fyp-object-open.jpg" width="1536" height="1024" loading="lazy"
+            decoding="async"
+            alt="The physical FYP triptych, fully unfolded — three hinged panels: I. Supplicant, II. Altar, III. Possession." />
+        </picture>
+      </figure>
+      <p class="stage3d__cue" aria-hidden="true">scroll to open</p>
+    </div>
   </section>
 
   <main id="main">
@@ -413,6 +451,7 @@
   </button>
 
   <script src="./script.js" defer></script>
+  <script type="module" src="./scene3d.js?v=20260602-art3"></script>
 </body>
 
 </html>

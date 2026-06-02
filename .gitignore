@@ -1,0 +1,26 @@
+# --- dependencies & local tooling ---
+node_modules/
+.tmp-vendor/
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*~
+
+# --- secrets & logs ---
+.env
+.env.*
+*.log
+npm-debug.log*
+
+# --- encode / npx scratch (scripts use %TEMP%; ignore if created in-repo) ---
+fyp-glb-*/
+
+# --- large 3D master (regenerate public/models/ via scripts/encode-model.*) ---
+raw/FYP_TRIPTYCH.glb

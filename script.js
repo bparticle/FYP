@@ -38,6 +38,8 @@
       toggle?.setAttribute('aria-pressed', 'false');
       document.querySelectorAll('video').forEach((v) => { try { v.play().catch(() => {}); } catch {} });
     }
+    // let the 3D module (scene3d.js) tear down / re-init the WebGL scene
+    try { window.dispatchEvent(new CustomEvent('fyp:motion', { detail: { off } })); } catch {}
   }
 
   // ---------- the triptych: toggle + drag-to-fold ----------

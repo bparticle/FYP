@@ -500,6 +500,100 @@ html.is-dragging .tp { transition: none !important; }
 }
 
 /* =========================================================
+   STAGE3D — the physical triptych in 3D, folded shut below the
+   hero. Pinned full-viewport while scroll scrubs the unfold; the
+   canvas is transparent so the salmon ground flows from the hero.
+   Falls back to a still image (html.no3d / <noscript>).
+   ========================================================= */
+.stage3d {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+}
+/* visually-hidden heading, kept for the document outline + a11y */
+.stage3d__sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip: rect(0 0 0 0); clip-path: inset(50%);
+  overflow: hidden; white-space: nowrap;
+}
+.stage3d__pin {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* plain white gallery wall, with the faintest vignette for depth */
+  background:
+    radial-gradient(130% 95% at 50% 32%, #ffffff 0%, #fafafa 62%, #f0efed 100%);
+}
+.stage3d__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  touch-action: pan-y;            /* let vertical scroll through the canvas */
+}
+
+/* scroll cue — small Courier hint, gently breathing, fades on first move */
+.stage3d__cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 5vh, 56px);
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.62;
+  pointer-events: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: stage3d-breathe 2.6s ease-in-out infinite;
+}
+.stage3d__cue::after {
+  content: "";
+  width: 1px; height: 22px;
+  background: linear-gradient(180deg, var(--ink), rgba(34,34,34,0));
+  opacity: 0.7;
+}
+@keyframes stage3d-breathe {
+  0%, 100% { opacity: 0.34; transform: translate(-50%, 0); }
+  50%      { opacity: 0.7;  transform: translate(-50%, 4px); }
+}
+
+/* fallback still — hidden when 3D is live, shown via html.no3d / noscript */
+.stage3d__fallback {
+  display: none;
+  margin: 0;
+  max-width: min(92vw, 1040px);
+  padding: clamp(48px, 9vh, 110px) 0;
+}
+.stage3d__fallback img {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(34, 34, 34, 0.10);
+  box-shadow: 0 30px 60px -38px rgba(34, 34, 34, 0.42);
+}
+
+/* no-3D state: WebGL missing, motion off, or load failed */
+html.no3d .stage3d__canvas,
+html.no3d .stage3d__cue { display: none; }
+html.no3d .stage3d__pin {
+  height: auto;
+  background: none;
+}
+html.no3d .stage3d__fallback { display: block; }
+
+/* =========================================================
    MAIN — salmon page, ink panels
    ========================================================= */
 main {
@@ -1221,7 +1315,18 @@ main {
   .companions__pair .oneone:nth-of-type(2) .oneone__media {
     background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
   }
+
+  /* no scroll-driven 3D under reduced motion — show the still */
+  .stage3d__canvas, .stage3d__cue { display: none; }
+  .stage3d__pin { height: auto; background: none; }
+  .stage3d__fallback { display: block; }
 }
+
+/* motion toggled off → same still fallback (scene3d also tears down WebGL) */
+body[data-motion="off"] .stage3d__canvas,
+body[data-motion="off"] .stage3d__cue { display: none; }
+body[data-motion="off"] .stage3d__pin { height: auto; background: none; }
+body[data-motion="off"] .stage3d__fallback { display: block; }
 
 body[data-motion="off"] .tp { transition: none !important; }
 body[data-motion="off"] .tp video { display: none; }
@@ -1251,6 +1356,10 @@ body[data-motion="off"] .companions__pair .oneone:nth-of-type(2) .oneone__media 
 @media print {
   .motion-toggle, .fold-toggle, .hero__chrome, .hero__bg,
   .hero::before, .hero::after { display: none !important; }
+  .stage3d__canvas, .stage3d__cue { display: none !important; }
+  .stage3d__pin { height: auto !important; background: none !important; }
+  .stage3d__fallback { display: block !important; }
+  .stage3d__fallback img { box-shadow: none; border-color: #000; }
   body { background: #fff; color: #000; }
   a { color: #000; }
   .hero {
