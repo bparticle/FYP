@@ -24,7 +24,7 @@
 
   <link rel="icon"
     href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%23000'/><text x='8' y='12' text-anchor='middle' font-family='Arial Black' font-size='11' fill='%23fff'>F</text></svg>" />
-  <link rel="stylesheet" href="./style.css?v=9" />
+  <link rel="stylesheet" href="./style.css?v=11" />
 
   <!-- 3D object: vendored libraries, no CDN. Import map resolves Three's
        internal `import ... from 'three'`; GSAP loads as globals. -->
@@ -36,9 +36,11 @@
   <!-- JS off → show the still image instead of an empty canvas -->
   <noscript>
     <style>
-      .stage3d__canvas, .stage3d__cue { display: none !important; }
+      .stage3d__canvas, .stage3d__cue, .stage3d__phase, .stage3d__hotspots { display: none !important; }
       .stage3d__pin { height: auto !important; background: none !important; }
       .stage3d__fallback { display: block !important; }
+      /* no JS → reveal the panel write-ups stacked (matches html.no3d) */
+      .panel-modal { display: block !important; position: static !important; }
     </style>
   </noscript>
 
@@ -66,12 +68,14 @@
 
   <a class="skip-link" href="#main">skip to content</a>
 
-  <!-- ============ HERO — the triptych, hinged panels that unfold on load ============ -->
-  <section class="hero" id="piece" aria-labelledby="hero-title">
-
-    <!-- Atmospheric backdrop — static still, washed -->
-    <img class="hero__bg" src="./public/media/fyp-static.png" alt="" width="1280" height="1280" decoding="async"
-      fetchpriority="high" aria-hidden="true" />
+  <!-- ============ HERO / 3D STAGE — the object leads.
+       Opens with the closed booklet slowly turning over a faded backdrop, the
+       announcement typography below it, and "scroll to begin". Scrolling pins
+       the stage: the backdrop washes to white, the typography lifts away, and
+       the object eases to center and unfolds. Once open, numbered hotspots
+       appear and each panel opens its write-up. Degrades to a titled poster +
+       stacked panels when WebGL is unavailable or motion is off (html.no3d). ============ -->
+  <section class="hero hero--stage" id="object3d" aria-labelledby="hero-title">
 
     <div class="hero__chrome">
       <span class="hero__id">
@@ -84,124 +88,146 @@
       </span>
       <nav class="hero__nav" aria-label="In-page">
         <a href="#object">object</a>
-        <a href="#centerpiece">altar</a>
-        <a href="#companions">wings</a>
         <a href="#raffle">raffle</a>
         <a href="#links">links</a>
       </nav>
     </div>
 
-    <div class="triptych" id="triptych">
+    <div class="stage3d__pin">
+      <!-- faded centerpiece backdrop — washes to white as you scroll -->
+      <img class="stage3d__bg" src="./public/media/fyp-static.png" alt="" width="1280" height="1280" decoding="async"
+        fetchpriority="high" aria-hidden="true" />
 
-      <div class="triptych__stage">
+      <canvas class="stage3d__canvas" aria-hidden="true"></canvas>
 
-        <!-- LEFT WING — Panel I -->
-        <article class="tp tp--left" aria-label="Panel I — Supplicant">
-          <div class="tp__face tp__face--front">
-            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
-              playsinline preload="metadata"
-              aria-label="Panel I — Supplicant. Figure with phone, hearts and tears."></video>
-            <span class="tp__pill" aria-label="Edition: 1 of 1">1&nbsp;/&nbsp;1</span>
-            <div class="tp__label">
-              <span class="tp__no">I</span>
-              <span class="tp__name">Supplicant</span>
-            </div>
-          </div>
-          <div class="tp__face tp__face--back" aria-hidden="true">
-            <div class="tp__cover">
-              <span class="tp__cover-rule"></span>
-              <span class="tp__cover-no">I</span>
-              <span class="tp__cover-name">Supplicant</span>
-              <span class="tp__cover-tag">left wing</span>
-              <span class="tp__cover-rule"></span>
-            </div>
-          </div>
-        </article>
+      <!-- graceful fallback: shown via html.no3d (no WebGL / motion off / JS off) -->
+      <figure class="stage3d__fallback">
+        <picture>
+          <source srcset="./public/media/fyp-object-open.webp" type="image/webp" />
+          <img src="./public/media/fyp-object-open.jpg" width="1536" height="1024" loading="lazy" decoding="async"
+            alt="The physical FYP triptych, fully unfolded — three hinged panels: I. Supplicant, II. Altar, III. Possession." />
+        </picture>
+      </figure>
 
-        <!-- CENTER — Panel II -->
-        <article class="tp tp--center" aria-label="Panel II — Altar, the center">
-          <div class="tp__media">
-            <video poster="./public/media/fyp-poster.jpg" autoplay loop muted playsinline preload="metadata"
-              aria-label="Panel II — Altar. Two figures plugged in, souls leaving through the cable.">
-              <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-              <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-            </video>
-            <span class="tp__pill tp__pill--center" aria-label="Edition: open">open&nbsp;ed.</span>
-            <div class="tp__label tp__label--center">
-              <span class="tp__no">II</span>
-              <span class="tp__name">Altar</span>
-            </div>
-          </div>
-        </article>
+      <!-- wayfinding — current phase of the journey; updated by scene3d.js -->
+      <p class="stage3d__phase" aria-live="polite">
+        <span class="stage3d__step is-active" data-phase="closed">closed <span aria-hidden="true">·</span> cover</span>
+        <span class="stage3d__step" data-phase="opening">opening</span>
+        <span class="stage3d__step" data-phase="open">open <span aria-hidden="true">·</span> tap a panel</span>
+      </p>
 
-        <!-- RIGHT WING — Panel III -->
-        <article class="tp tp--right" aria-label="Panel III — Possession">
-          <div class="tp__face tp__face--front">
-            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
-              playsinline preload="metadata"
-              aria-label="Panel III — Possession. Hollow profile holding a tablet showing a feed."></video>
-            <span class="tp__pill" aria-label="Edition: 25 of 25">25&nbsp;/&nbsp;25</span>
-            <div class="tp__label">
-              <span class="tp__no">III</span>
-              <span class="tp__name">Possession</span>
-            </div>
-          </div>
-          <div class="tp__face tp__face--back" aria-hidden="true">
-            <div class="tp__cover">
-              <span class="tp__cover-rule"></span>
-              <span class="tp__cover-no">III</span>
-              <span class="tp__cover-name">Possession</span>
-              <span class="tp__cover-tag">right wing</span>
-              <span class="tp__cover-rule"></span>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-      <!-- Museum plaque beneath the work -->
-      <div class="triptych__plaque">
+      <!-- announcement — sits below the object; lifts away as you scroll in -->
+      <div class="stage3d__plaque">
         <h1 id="hero-title" class="triptych__wordmark" aria-label="FYP">FYP</h1>
         <p class="triptych__title">the FYP triptych <span aria-hidden="true">—</span> <em>an altarpiece for the
             algorithm</em></p>
-        <p class="triptych__predella">II. Altar <span aria-hidden="true">—</span> <em>the altar of the algorithm. </em>
-        </p>
         <p class="triptych__opening">
           <span class="triptych__opening-tag">the doors open</span>
           <time class="triptych__opening-date" datetime="2026-06-05">5 June 2026</time>
           <span class="triptych__opening-sub">mint <span aria-hidden="true">&amp;</span> auction begin</span>
         </p>
-        <ul class="triptych__facts">
-          <li>open edition &middot; tezos &middot; closes when it closes</li>
-          <li>objkt one curation &middot; nfc lisbon, jun 2026</li>
-          <li>flanked by i. supplicant &amp; iii. possession</li>
-        </ul>
       </div>
 
+      <!-- click affordances — positioned over each panel by scene3d.js, shown
+           only when the object is fully open. Real buttons → keyboard/AT usable. -->
+      <div class="stage3d__hotspots" aria-hidden="false">
+        <button class="hotspot" type="button" data-panel="1" hidden
+          aria-label="Panel I — Supplicant. Open description.">
+          <span class="hotspot__dot" aria-hidden="true"></span>
+          <span class="hotspot__badge"><span class="hotspot__no">I</span><span class="hotspot__tip">tap to
+              explore</span></span>
+        </button>
+        <button class="hotspot" type="button" data-panel="2" hidden
+          aria-label="Panel II — Altar. Open description.">
+          <span class="hotspot__dot" aria-hidden="true"></span>
+          <span class="hotspot__badge"><span class="hotspot__no">II</span><span class="hotspot__tip">tap to
+              explore</span></span>
+        </button>
+        <button class="hotspot" type="button" data-panel="3" hidden
+          aria-label="Panel III — Possession. Open description.">
+          <span class="hotspot__dot" aria-hidden="true"></span>
+          <span class="hotspot__badge"><span class="hotspot__no">III</span><span class="hotspot__tip">tap to
+              explore</span></span>
+        </button>
+      </div>
+
+      <p class="stage3d__cue" aria-hidden="true">scroll to begin</p>
     </div>
 
   </section>
 
-  <!-- ============ THE OBJECT IN 3D — folded shut below the hero.
-       Scroll scrubs the unfold (right wing, then left); it floats while
-       idle and leans toward the cursor. When fully open the sticky
-       releases and the page scrolls on. Degrades to a still image when
-       WebGL is unavailable or motion is off (see html.no3d). ============ -->
-  <section class="stage3d" id="object3d" aria-labelledby="stage3d-title">
-    <h2 id="stage3d-title" class="stage3d__sr">The triptych in 3D — scroll to unfold</h2>
-    <div class="stage3d__pin">
-      <canvas class="stage3d__canvas" aria-hidden="true"></canvas>
-      <!-- graceful fallback: shown via html.no3d (no WebGL / motion off / JS off) -->
-      <figure class="stage3d__fallback">
-        <picture>
-          <source srcset="./public/media/fyp-object-open.webp" type="image/webp" />
-          <img src="./public/media/fyp-object-open.jpg" width="1536" height="1024" loading="lazy"
-            decoding="async"
-            alt="The physical FYP triptych, fully unfolded — three hinged panels: I. Supplicant, II. Altar, III. Possession." />
-        </picture>
-      </figure>
-      <p class="stage3d__cue" aria-hidden="true">scroll to open</p>
-    </div>
+  <!-- ============ THE THREE PANELS — modal write-ups for each part of the
+       object. Opened by tapping a panel (or its hotspot) in the 3D scene above.
+       Native <dialog> → focus trap + Esc for free. When 3D is unavailable
+       (html.no3d), CSS force-shows these stacked as a normal gallery so the
+       content is never lost. ============ -->
+  <section class="panels-fallback" aria-labelledby="panels-fallback-title">
+    <h2 id="panels-fallback-title" class="stage3d__sr">The three panels of the FYP triptych</h2>
+
+    <!-- PANEL I — Supplicant (left wing) -->
+    <dialog class="panel-modal" id="panel-modal-1" aria-labelledby="panel-modal-1-title">
+      <button class="panel-modal__close" type="button" aria-label="Close" data-close>&times;</button>
+      <article class="oneone" aria-labelledby="panel-modal-1-title">
+        <div class="oneone__media">
+          <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" loop muted playsinline
+            preload="none" aria-label="Panel I — figure with phone, hearts and tears."></video>
+        </div>
+        <div class="oneone__top">
+          <span><b>PANEL&nbsp;I</b> &middot; LEFT&nbsp;WING</span>
+          <span>1&nbsp;/&nbsp;1</span>
+        </div>
+        <h3 id="panel-modal-1-title" class="oneone__title">I. Supplicant</h3>
+        <p class="oneone__predella"><em>An offering of tears and hearts, a daily liturgy.</em></p>
+        <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a
+            href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/8" target="_blank"
+            rel="noopener">objkt</a></p>
+      </article>
+    </dialog>
+
+    <!-- PANEL II — Altar (center, open edition) -->
+    <dialog class="panel-modal panel-modal--center" id="panel-modal-2" aria-labelledby="panel-modal-2-title">
+      <button class="panel-modal__close" type="button" aria-label="Close" data-close>&times;</button>
+      <article class="oneone oneone--center" aria-labelledby="panel-modal-2-title">
+        <div class="oneone__media">
+          <video poster="./public/media/fyp-poster.jpg" loop muted playsinline preload="none"
+            aria-label="Panel II — two figures plugged in.">
+            <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+            <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="oneone__top">
+          <span><b>PANEL&nbsp;II</b> &middot; CENTER</span>
+          <span>OPEN&nbsp;EDITION</span>
+        </div>
+        <h3 id="panel-modal-2-title" class="oneone__title">II. Altar</h3>
+        <p class="oneone__predella"><em>We sacrifice our time and attention on the altar of the algorithm. We are
+            looking for emotions, a dream, a new version of ourselves, distraction, relief. Plugged in, zoned out.
+            Users.</em></p>
+        <p class="oneone__meta">FYP &middot; tezos &middot; open edition &middot; <a
+            href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9" target="_blank" rel="noopener">mint
+            on objkt</a></p>
+      </article>
+    </dialog>
+
+    <!-- PANEL III — Possession (right wing) -->
+    <dialog class="panel-modal" id="panel-modal-3" aria-labelledby="panel-modal-3-title">
+      <button class="panel-modal__close" type="button" aria-label="Close" data-close>&times;</button>
+      <article class="oneone" aria-labelledby="panel-modal-3-title">
+        <div class="oneone__media">
+          <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" loop muted playsinline
+            preload="none" aria-label="Panel III — hollow profile holding a tablet showing a feed."></video>
+        </div>
+        <div class="oneone__top">
+          <span><b>PANEL&nbsp;III</b> &middot; RIGHT&nbsp;WING</span>
+          <span>25&nbsp;/&nbsp;25</span>
+        </div>
+        <h3 id="panel-modal-3-title" class="oneone__title">III. Possession</h3>
+        <p class="oneone__predella"><em>the wraith remains. the feed continues. hands no longer still.</em></p>
+        <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a
+            href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/10" target="_blank"
+            rel="noopener">objkt</a></p>
+      </article>
+    </dialog>
   </section>
 
   <main id="main">
@@ -216,6 +242,11 @@
         <p class="object__lede">A hand-held altarpiece — 3D printed and finished by hand. Awarded in full to the
           single collector who holds all three panels of the FYP triptych:
           <em>I. Supplicant</em>, <em>II. Altar</em>, and <em>III. Possession</em>.</p>
+        <ul class="object__facts">
+          <li>open edition &middot; tezos &middot; closes when it closes</li>
+          <li>objkt one curation &middot; nfc lisbon, jun 2026</li>
+          <li>flanked by i. supplicant &amp; iii. possession</li>
+        </ul>
       </div>
 
       <!-- Hero plate — the open altarpiece, floating in the white room -->
@@ -295,74 +326,6 @@
 
     </section>
 
-    <!-- ============ THE CENTERPIECE — panel ii ============ -->
-    <section class="centerpiece" id="centerpiece" aria-labelledby="centerpiece-title">
-      <h2 id="centerpiece-title" class="centerpiece__h">the centerpiece.</h2>
-      <p class="centerpiece__sub">ii. altar — the open edition center of the fyp triptych.</p>
-
-      <article class="oneone oneone--center" aria-labelledby="centerpiece-altar-title">
-        <div class="oneone__media">
-          <video poster="./public/media/fyp-poster.jpg" autoplay loop muted playsinline preload="metadata"
-            aria-label="Panel II — two figures plugged in.">
-            <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
-            <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <div class="oneone__top">
-          <span><b>PANEL&nbsp;II</b> &middot; CENTER</span>
-          <span>OPEN&nbsp;EDITION</span>
-        </div>
-        <h3 id="centerpiece-altar-title" class="oneone__title">II. Altar</h3>
-        <p class="oneone__predella"><em>We sacrifice our time and attention on the altar of the algorithm. We are
-            looking for emotions, a dream, a new version of ourselves, distraction, relief. Plugged in, zoned out.
-            Users.</em></p>
-        <p class="oneone__meta">FYP &middot; tezos &middot; open edition &middot; <a
-            href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9" target="_blank" rel="noopener">mint
-            on objkt</a></p>
-      </article>
-    </section>
-
-    <!-- ============ THE WINGS — panels i & iii ============ -->
-    <section class="companions" id="companions" aria-labelledby="companions-title">
-      <h2 id="companions-title" class="companions__h">the wings.</h2>
-      <p class="companions__sub">i. supplicant &amp; iii. possession — the flanking panels of the fyp triptych.</p>
-
-      <div class="companions__pair">
-        <article class="oneone" aria-labelledby="oneone1-title">
-          <div class="oneone__media">
-            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
-              playsinline preload="metadata" aria-label="Panel I — figure with phone, hearts and tears."></video>
-          </div>
-          <div class="oneone__top">
-            <span><b>PANEL&nbsp;I</b> &middot; LEFT&nbsp;WING</span>
-            <span>1&nbsp;/&nbsp;1</span>
-          </div>
-          <h3 id="oneone1-title" class="oneone__title">I. Supplicant</h3>
-          <p class="oneone__predella"><em>An offering of tears and hearts, a daily liturgy.</em></p>
-          <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a
-              href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/8" target="_blank"
-              rel="noopener">objkt</a></p>
-        </article>
-
-        <article class="oneone" aria-labelledby="oneone2-title">
-          <div class="oneone__media">
-            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
-              playsinline preload="metadata"
-              aria-label="Panel III — hollow profile holding a tablet showing a feed."></video>
-          </div>
-          <div class="oneone__top">
-            <span><b>PANEL&nbsp;III</b> &middot; RIGHT&nbsp;WING</span>
-            <span>25&nbsp;/&nbsp;25</span>
-          </div>
-          <h3 id="oneone2-title" class="oneone__title">III. Possession</h3>
-          <p class="oneone__predella"><em>the wraith remains. the feed continues. hands no longer still.</em></p>
-          <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a
-              href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/10" target="_blank"
-              rel="noopener">objkt</a></p>
-        </article>
-      </div>
-    </section>
-
     <!-- ============ PHYSICAL RAFFLE — same white-box gallery as the object ============ -->
     <section class="object object--raffle" id="raffle" aria-labelledby="raffle-title">
 
@@ -436,22 +399,8 @@
     <p>the fyp triptych &middot; sirius crocodile &middot; mmxxvi</p>
   </footer>
 
-  <!-- Replay the triptych unfold -->
-  <button id="fold-toggle" class="fold-toggle" type="button" aria-pressed="true"
-    aria-label="Fold or unfold the triptych">
-    <span class="fold-toggle__a">fold</span>
-    <span class="fold-toggle__b">unfold</span>
-  </button>
-
-  <!-- a11y: persistent toggle for motion -->
-  <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false"
-    aria-label="Toggle background motion">
-    <span class="motion-toggle__on">motion: on</span>
-    <span class="motion-toggle__off">motion: off</span>
-  </button>
-
   <script src="./script.js" defer></script>
-  <script type="module" src="./scene3d.js?v=20260602-art3"></script>
+  <script type="module" src="./scene3d.js?v=20260603-hero1"></script>
 </body>
 
 </html>

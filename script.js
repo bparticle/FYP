@@ -3,7 +3,6 @@
   const body = document.body;
   const html = document.documentElement;
   const toggle = document.getElementById('motion-toggle');
-  const foldToggle = document.getElementById('fold-toggle');
   const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   // initialize motion state — honor system preference + stored choice
@@ -28,11 +27,7 @@
       toggle?.setAttribute('aria-pressed', 'true');
       // pause videos to be polite to battery
       document.querySelectorAll('video').forEach((v) => { try { v.pause(); } catch {} });
-      // motion off → triptych should be open immediately, no transition
       html.dataset.triptychState = 'open';
-      foldToggle?.setAttribute('aria-pressed', 'true');
-      // clear any inline transforms left over from a drag
-      document.querySelectorAll('.tp--left, .tp--right').forEach((el) => { el.style.transform = ''; });
     } else {
       delete body.dataset.motion;
       toggle?.setAttribute('aria-pressed', 'false');
@@ -42,129 +37,73 @@
     try { window.dispatchEvent(new CustomEvent('fyp:motion', { detail: { off } })); } catch {}
   }
 
-  // ---------- the triptych: toggle + drag-to-fold ----------
-  const triptych = document.getElementById('triptych');
-  const stage = triptych?.querySelector('.triptych__stage');
-  const leftWing = triptych?.querySelector('.tp--left');
-  const rightWing = triptych?.querySelector('.tp--right');
+  // ---------- panel modals (the 3D object's click-to-read write-ups) ----------
+  // Opened by tapping a panel (or its hotspot) in the 3D scene; native <dialog>
+  // gives focus trap + Esc. The same dialogs double as the no-3D stacked
+  // fallback (shown via html.no3d in CSS) — there they just sit open inline.
+  const panelModals = {
+    1: document.getElementById('panel-modal-1'),
+    2: document.getElementById('panel-modal-2'),
+    3: document.getElementById('panel-modal-3'),
+  };
+  let lastModalTrigger = null;
 
-  // OPEN and CLOSED angles must match the CSS custom properties per breakpoint.
-  const readAngles = () => {
-    const root = getComputedStyle(html);
-    const open = parseFloat(root.getPropertyValue('--tp-open')) || 16;
-    const closed = parseFloat(root.getPropertyValue('--tp-closed')) || 132;
-    return { openLeft: open, openRight: -open, closedLeft: closed, closedRight: -closed };
+  const playModalVideo = (dialog) => {
+    if (!dialog || body.dataset.motion === 'off') return;
+    const v = dialog.querySelector('video');
+    if (v) { try { v.play().catch(() => {}); } catch {} }
+  };
+  const stopModalVideo = (dialog) => {
+    const v = dialog && dialog.querySelector('video');
+    if (v) { try { v.pause(); } catch {} }
   };
 
-  // Sync the fold toggle's aria-pressed with the current state
-  const syncFold = () => {
-    if (!foldToggle) return;
-    foldToggle.setAttribute('aria-pressed', html.dataset.triptychState === 'closed' ? 'false' : 'true');
+  const openPanel = (n) => {
+    const dialog = panelModals[n];
+    if (!dialog || typeof dialog.showModal !== 'function' || dialog.open) return;
+    lastModalTrigger = document.activeElement;
+    dialog.showModal();
+    playModalVideo(dialog);
   };
-  syncFold();
-  if (typeof MutationObserver !== 'undefined') {
-    new MutationObserver(syncFold).observe(html, {
-      attributes: true,
-      attributeFilter: ['data-triptych-state'],
+
+  Object.values(panelModals).forEach((dialog) => {
+    if (!dialog) return;
+    dialog.querySelectorAll('[data-close]').forEach((b) =>
+      b.addEventListener('click', () => dialog.open && dialog.close()));
+    // click on the backdrop (the dialog box itself, outside the card) closes
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    // on close (Esc / .close() / backdrop): pause video, restore focus
+    dialog.addEventListener('close', () => {
+      stopModalVideo(dialog);
+      if (lastModalTrigger && typeof lastModalTrigger.focus === 'function') {
+        try { lastModalTrigger.focus(); } catch {}
+      }
+      lastModalTrigger = null;
     });
-  }
-
-  foldToggle?.addEventListener('click', () => {
-    // Clear any inline transform so the CSS rule for the new state takes effect
-    if (leftWing) leftWing.style.transform = '';
-    if (rightWing) rightWing.style.transform = '';
-    html.dataset.triptychState = html.dataset.triptychState === 'closed' ? 'open' : 'closed';
   });
 
-  // Drag a wing inward to close, outward to open. Mirrors to the other wing.
-  if (leftWing && rightWing && stage) {
-    const interp = (a, b, t) => a + (b - a) * t;
+  // hotspot buttons (positioned over each panel by scene3d.js) + 3D raycast taps
+  document.querySelectorAll('.hotspot[data-panel]').forEach((btn) =>
+    btn.addEventListener('click', () => openPanel(btn.dataset.panel)));
+  window.addEventListener('fyp:openpanel', (e) => {
+    const n = e && e.detail && e.detail.panel;
+    if (n) openPanel(n);
+  });
 
-    const applyProgress = (p) => {
-      // p: 0 = open, 1 = closed
-      const angles = readAngles();
-      const left  = interp(angles.openLeft,  angles.closedLeft,  p);
-      const right = interp(angles.openRight, angles.closedRight, p);
-      leftWing.style.transform  = `rotateY(${left.toFixed(2)}deg)`;
-      rightWing.style.transform = `rotateY(${right.toFixed(2)}deg)`;
-    };
-
-    let drag = null;
-
-    const onDown = (side) => (e) => {
-      if (e.button !== undefined && e.button !== 0) return;
-      const wing = side === 'left' ? leftWing : rightWing;
-      const startProgress = html.dataset.triptychState === 'closed' ? 1 : 0;
-      drag = {
-        side,
-        startX: e.clientX,
-        startProgress,
-        // map ~25% of stage width to a full close — gentle enough for trackpads,
-        // tight enough to feel responsive on touch
-        range: Math.max(160, stage.offsetWidth * 0.25),
-        pointerId: e.pointerId,
-        moved: false,
-      };
-      html.classList.add('is-dragging');
-      try { wing.setPointerCapture(e.pointerId); } catch (_) {}
-      e.preventDefault();
-    };
-
-    const onMove = (e) => {
-      if (!drag) return;
-      const dx = e.clientX - drag.startX;
-      if (Math.abs(dx) > 5) drag.moved = true;
-      if (!drag.moved) return;
-      // left wing: dragging right (+dx) closes; right wing: dragging left (-dx) closes
-      const sign = drag.side === 'left' ? 1 : -1;
-      let p = drag.startProgress + (dx * sign) / drag.range;
-      p = Math.max(0, Math.min(1, p));
-      applyProgress(p);
-    };
-
-    const onUp = (e) => {
-      if (!drag) return;
-      html.classList.remove('is-dragging');
-
-      // Tap without drag → toggle (parity with the fold button)
-      if (!drag.moved) {
-        leftWing.style.transform = '';
-        rightWing.style.transform = '';
-        html.dataset.triptychState = html.dataset.triptychState === 'closed' ? 'open' : 'closed';
-        drag = null;
-        return;
-      }
-
-      const dx = e.clientX - drag.startX;
-      const sign = drag.side === 'left' ? 1 : -1;
-      let p = drag.startProgress + (dx * sign) / drag.range;
-      p = Math.max(0, Math.min(1, p));
-
-      const targetState = p > 0.5 ? 'closed' : 'open';
-      // Force the snap target on the next frame so the transition fires from
-      // current angle (last drag value) to the snapped angle.
-      requestAnimationFrame(() => {
-        applyProgress(targetState === 'closed' ? 1 : 0);
-        html.dataset.triptychState = targetState;
-        // After the transition settles, clear inline so the CSS rule owns the value again
-        setTimeout(() => {
-          if (drag) return;
-          leftWing.style.transform = '';
-          rightWing.style.transform = '';
-        }, 1500);
-      });
-
-      drag = null;
-    };
-
-    leftWing.addEventListener('pointerdown', onDown('left'));
-    rightWing.addEventListener('pointerdown', onDown('right'));
-    [leftWing, rightWing].forEach((w) => {
-      w.addEventListener('pointermove', onMove);
-      w.addEventListener('pointerup', onUp);
-      w.addEventListener('pointercancel', onUp);
+  // when 3D is unavailable the dialogs render stacked (html.no3d) — play their
+  // videos there; pause again if 3D comes back and the dialog is closed.
+  const syncFallbackVideos = () => {
+    const fallback = html.classList.contains('no3d');
+    Object.values(panelModals).forEach((d) => {
+      if (!d) return;
+      if (fallback && body.dataset.motion !== 'off') playModalVideo(d);
+      else if (!fallback && !d.open) stopModalVideo(d);
     });
+  };
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(syncFallbackVideos).observe(html, { attributes: true, attributeFilter: ['class'] });
   }
+  syncFallbackVideos();
 
   // ---------- the easter egg ----------
   // type "fyp" anywhere to invert the page for 1.2s
@@ -186,6 +125,10 @@
   const tryPlay = () => {
     if (body.dataset.motion === 'off') return;
     document.querySelectorAll('video').forEach((v) => {
+      // closed panel-modal videos are managed by openPanel — don't wake them
+      // unless they're showing as the stacked no-3D fallback
+      const modal = v.closest('.panel-modal');
+      if (modal && !modal.open && !html.classList.contains('no3d')) return;
       if (v.paused) { v.play().catch(() => {}); }
     });
     window.removeEventListener('pointerdown', tryPlay);
