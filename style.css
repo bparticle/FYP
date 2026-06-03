@@ -825,14 +825,8 @@ main {
   background: rgba(20, 16, 16, 0.66);
   backdrop-filter: blur(2px);
 }
-/* entry animation when opened via showModal() */
-.panel-modal[open] {
-  animation: panel-modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes panel-modal-in {
-  from { opacity: 0; transform: translateY(16px) scale(0.985); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
+/* entry/exit animations are driven by WAAPI in script.js — no CSS conflicts */
+.panel-modal.is-closing { pointer-events: none; }
 .panel-modal .oneone {
   box-shadow: none;
   max-height: 88vh;
@@ -1184,6 +1178,33 @@ html.no3d .panel-modal .oneone { max-height: none; overflow: visible; }
   opacity: 0.8;
 }
 
+/* =========================================================
+   THE THREE PIECES — three video cards between #object and #raffle.
+   Continues the white band; no top or bottom border of its own.
+   ========================================================= */
+.object--pieces {
+  margin-top: 0;
+  border-top: 0;
+  border-bottom: 0;
+  padding-top: clamp(36px, 5vh, 64px);
+  padding-bottom: clamp(40px, 6vh, 80px);
+}
+.object--pieces .object__head {
+  margin-bottom: clamp(28px, 4vh, 52px);
+}
+
+.pieces__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3.5vw, 44px);
+  max-width: 1040px;
+  margin: 0 auto;
+  align-items: start;
+  /* breathing room so the 14px ink shadow on each card isn't clipped */
+  padding-right: 16px;
+  padding-bottom: 16px;
+}
+
 /* Physical raffle — reuses the object gallery room */
 .object__prints {
   display: grid;
@@ -1257,6 +1278,49 @@ html.no3d .panel-modal .oneone { max-height: none; overflow: visible; }
   max-width: 64ch;
   color: var(--ink);
 }
+
+/* socials — quiet colophon row, no visual weight */
+.socials__list {
+  list-style: none;
+  padding: 16px 0 0;
+  margin: 14px 0 18px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(34, 34, 34, 0.14);
+}
+.socials__list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 0;
+  background: none;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  opacity: 0.52;
+  transition: opacity 0.15s ease;
+}
+.socials__list a:hover,
+.socials__list a:focus-visible {
+  background: none;
+  color: var(--ink);
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  outline: none;
+}
+.socials__icon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.socials__label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.socials__handle { display: none; }
 
 /* =========================================================
    FOOTER
@@ -1438,6 +1502,7 @@ html.no3d .panel-modal .oneone { max-height: none; overflow: visible; }
   .object__pair,
   .object__prints { grid-template-columns: 1fr; gap: clamp(24px, 5vh, 36px); }
   .object__prints .object__cell:nth-child(3) { grid-column: auto; }
+  .pieces__grid { grid-template-columns: 1fr; max-width: 480px; padding-right: 14px; }
 }
 
 /* short landscape phones — scroll the altarpiece instead of crushing it */
@@ -1506,6 +1571,16 @@ html.no3d .panel-modal .oneone { max-height: none; overflow: visible; }
   #panel-modal-3 .oneone__media {
     background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
   }
+  .pieces__card video { display: none; }
+  .pieces__card--1 .oneone__media {
+    background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
+  }
+  .pieces__card--2 .oneone__media {
+    background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+  }
+  .pieces__card--3 .oneone__media {
+    background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
+  }
 
   /* no scroll-driven 3D under reduced motion — show the still + stacked panels */
   .stage3d__canvas, .stage3d__cue, .stage3d__phase, .stage3d__hotspots { display: none; }
@@ -1540,6 +1615,16 @@ body[data-motion="off"] #panel-modal-2 .oneone__media {
   background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
 }
 body[data-motion="off"] #panel-modal-3 .oneone__media {
+  background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .pieces__card video { display: none; }
+body[data-motion="off"] .pieces__card--1 .oneone__media {
+  background: var(--ink) url("./public/media/fyp-1-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .pieces__card--2 .oneone__media {
+  background: var(--ink) url("./public/media/fyp-poster.jpg") center/cover no-repeat;
+}
+body[data-motion="off"] .pieces__card--3 .oneone__media {
   background: var(--ink) url("./public/media/fyp-2-poster.jpg") center/cover no-repeat;
 }
 

@@ -36,11 +36,27 @@
   <!-- JS off → show the still image instead of an empty canvas -->
   <noscript>
     <style>
-      .stage3d__canvas, .stage3d__cue, .stage3d__phase, .stage3d__hotspots { display: none !important; }
-      .stage3d__pin { height: auto !important; background: none !important; }
-      .stage3d__fallback { display: block !important; }
+      .stage3d__canvas,
+      .stage3d__cue,
+      .stage3d__phase,
+      .stage3d__hotspots {
+        display: none !important;
+      }
+
+      .stage3d__pin {
+        height: auto !important;
+        background: none !important;
+      }
+
+      .stage3d__fallback {
+        display: block !important;
+      }
+
       /* no JS → reveal the panel write-ups stacked (matches html.no3d) */
-      .panel-modal { display: block !important; position: static !important; }
+      .panel-modal {
+        display: block !important;
+        position: static !important;
+      }
     </style>
   </noscript>
 
@@ -137,11 +153,9 @@
           <span class="hotspot__badge"><span class="hotspot__no">I</span><span
               class="hotspot__tip">Supplicant</span></span>
         </button>
-        <button class="hotspot" type="button" data-panel="2" hidden
-          aria-label="Panel II — Altar. Open description.">
+        <button class="hotspot" type="button" data-panel="2" hidden aria-label="Panel II — Altar. Open description.">
           <span class="hotspot__dot" aria-hidden="true"></span>
-          <span class="hotspot__badge"><span class="hotspot__no">II</span><span
-              class="hotspot__tip">Altar</span></span>
+          <span class="hotspot__badge"><span class="hotspot__no">II</span><span class="hotspot__tip">Altar</span></span>
         </button>
         <button class="hotspot" type="button" data-panel="3" hidden
           aria-label="Panel III — Possession. Open description.">
@@ -241,7 +255,8 @@
         <h2 id="object-title" class="object__h">The object.</h2>
         <p class="object__lede">A hand-held altarpiece — 3D printed and finished by hand. Awarded in full to the
           single collector who holds all three panels of the FYP triptych:
-          <em>I. Supplicant</em>, <em>II. Altar</em>, and <em>III. Possession</em>.</p>
+          <em>I. Supplicant</em>, <em>II. Altar</em>, and <em>III. Possession</em>.
+        </p>
         <ul class="object__facts">
           <li>open edition &middot; tezos &middot; closes when it closes</li>
           <li>objkt one curation &middot; nfc lisbon, jun 2026</li>
@@ -273,7 +288,8 @@
             <img src="./public/media/fyp-object-closed.jpg" width="1200" height="800" loading="lazy" decoding="async"
               alt="The FYP triptych closed — cover lettered FYP TRIPTYCH by Sirius Crocodile, panel titles down the spine." />
           </picture>
-          <figcaption><span class="object__no">i</span> closed <span aria-hidden="true">—</span> cover &amp; colophon</figcaption>
+          <figcaption><span class="object__no">i</span> closed <span aria-hidden="true">—</span> cover &amp; colophon
+          </figcaption>
         </figure>
         <figure class="object__cell">
           <picture>
@@ -281,7 +297,8 @@
             <img src="./public/media/fyp-object-halfopen.jpg" width="1200" height="864" loading="lazy" decoding="async"
               alt="The FYP triptych half-open — hand-lettered predella text inside the cover beside panel III. Possession." />
           </picture>
-          <figcaption><span class="object__no">ii</span> the fold <span aria-hidden="true">—</span> hand-lettered predella</figcaption>
+          <figcaption><span class="object__no">ii</span> the fold <span aria-hidden="true">—</span> hand-lettered
+            predella</figcaption>
         </figure>
       </div>
 
@@ -293,13 +310,15 @@
             <img src="./public/media/fyp-object-hand.jpg" width="1000" height="1502" loading="lazy" decoding="async"
               alt="The closed FYP triptych held in a hand, showing its palm scale." />
           </picture>
-          <figcaption><span class="object__no">iii</span> in hand <span aria-hidden="true">—</span> palm scale</figcaption>
+          <figcaption><span class="object__no">iii</span> in hand <span aria-hidden="true">—</span> palm scale
+          </figcaption>
         </figure>
 
         <div class="object__detail-copy">
           <div class="object__note">
             <h3 class="object__note-h">Three panels, three tags</h3>
-            <p>Each panel of the altarpiece carries its own NFC tag. Tap a panel and it opens the collectible — the object in your hand and the work on-chain, bound one to one.</p>
+            <p>Each panel of the altarpiece carries its own NFC tag. Tap a panel and it opens the collectible — the
+              object in your hand and the work on-chain, bound one to one.</p>
             <ul class="object__map" aria-label="panel to collectible">
               <li><span class="object__map-no">I</span> Supplicant <span class="object__map-arrow"
                   aria-hidden="true">→</span> <span class="object__map-ed">1 / 1</span></li>
@@ -326,14 +345,83 @@
 
     </section>
 
+    <!-- ============ THE THREE PIECES — inline view for those who missed the 3D hotspot interactions.
+         Same white band as #object above and #raffle below. ============ -->
+    <section class="object object--pieces" id="pieces" aria-labelledby="pieces-title">
+
+      <div class="object__head">
+        <p class="object__eyebrow">digital works <span aria-hidden="true">·</span> all three panels</p>
+        <h2 id="pieces-title" class="object__h">The pieces.</h2>
+      </div>
+
+      <div class="pieces__grid">
+
+        <article class="oneone pieces__card pieces__card--1">
+          <div class="oneone__media">
+            <video src="./public/media/fyp-1-web.mp4" poster="./public/media/fyp-1-poster.jpg" autoplay loop muted
+              playsinline preload="none" aria-label="Panel I — figure with phone, hearts and tears."></video>
+          </div>
+          <div class="oneone__top">
+            <span><b>PANEL&nbsp;I</b> &middot; LEFT&nbsp;WING</span>
+            <span>1&nbsp;/&nbsp;1</span>
+          </div>
+          <h3 class="oneone__title">I. Supplicant</h3>
+          <p class="oneone__predella"><em>An offering of tears and hearts, a daily liturgy.</em></p>
+          <p class="oneone__meta">FYP&nbsp;1 &middot; tezos &middot; <a
+              href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/8" target="_blank"
+              rel="noopener">objkt</a></p>
+        </article>
+
+        <article class="oneone pieces__card pieces__card--2">
+          <div class="oneone__media">
+            <video poster="./public/media/fyp-poster.jpg" autoplay loop muted playsinline preload="none"
+              aria-label="Panel II — two figures plugged in.">
+              <source src="./public/media/fyp-static1-web.webm" type="video/webm" />
+              <source src="./public/media/fyp-static1-web.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <div class="oneone__top">
+            <span><b>PANEL&nbsp;II</b> &middot; CENTER</span>
+            <span>OPEN&nbsp;EDITION</span>
+          </div>
+          <h3 class="oneone__title">II. Altar</h3>
+          <p class="oneone__predella"><em>We sacrifice our time and attention on the altar of the algorithm.
+              Plugged in, zoned out. Users.</em></p>
+          <p class="oneone__meta">FYP &middot; tezos &middot; open edition &middot; <a
+              href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9" target="_blank" rel="noopener">mint
+              on objkt</a></p>
+        </article>
+
+        <article class="oneone pieces__card pieces__card--3">
+          <div class="oneone__media">
+            <video src="./public/media/fyp-2-web.mp4" poster="./public/media/fyp-2-poster.jpg" autoplay loop muted
+              playsinline preload="none"
+              aria-label="Panel III — hollow profile holding a tablet showing a feed."></video>
+          </div>
+          <div class="oneone__top">
+            <span><b>PANEL&nbsp;III</b> &middot; RIGHT&nbsp;WING</span>
+            <span>25&nbsp;/&nbsp;25</span>
+          </div>
+          <h3 class="oneone__title">III. Possession</h3>
+          <p class="oneone__predella"><em>the wraith remains. the feed continues. hands no longer still.</em></p>
+          <p class="oneone__meta">FYP&nbsp;2 &middot; tezos &middot; <a
+              href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/10" target="_blank"
+              rel="noopener">objkt</a></p>
+        </article>
+
+      </div>
+
+    </section>
+
     <!-- ============ PHYSICAL RAFFLE — same white-box gallery as the object ============ -->
     <section class="object object--raffle" id="raffle" aria-labelledby="raffle-title">
 
       <div class="object__head">
         <p class="object__eyebrow">Holder's reward <span aria-hidden="true">·</span> open edition</p>
         <h2 id="raffle-title" class="object__h">Physical raffle.</h2>
-        <p class="object__lede">Mint <em>II. Altar</em>, hold through the snapshot, and enter the draw for 3D printed
-          collectibles — hand-finished pieces raffled among holders of the open edition.</p>
+        <p class="object__lede">Mint <em>II. Altar</em> and stay tuned for announcements to enter the draw for at least
+          one 3D
+          printed collectible — a hand-finished piece raffled among holders of the open edition.</p>
       </div>
 
       <div class="object__prints" aria-label="3D printed collectibles">
@@ -364,8 +452,9 @@
           <div class="object__note">
             <h3 class="object__note-h">How the raffle works</h3>
             <ol class="object__steps" aria-label="how the raffle works">
-              <li><b>01</b> mint the open edition on <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9"
-                  target="_blank" rel="noopener">II. Altar</a> on objkt</li>
+              <li><b>01</b> mint the open edition on <a
+                  href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/9" target="_blank"
+                  rel="noopener">II. Altar</a> on objkt</li>
               <li><b>02</b> hold the piece through the snapshot</li>
               <li><b>03</b> 3D printed collectibles are raffled among holders</li>
             </ol>
@@ -379,13 +468,52 @@
     <section class="links" id="links" aria-labelledby="links-title">
       <h2 id="links-title" class="links__h">links.</h2>
       <ul class="links__list">
-        <li><a href="https://objkt.com" target="_blank" rel="noopener">objkt.com — the marketplace</a></li>
         <li><a href="https://objkt.com/exhibitions/fyp-for-your-page-31562766" target="_blank" rel="noopener">objkt.one
             — the curation</a></li>
-        <li><a href="https://www.nonfungibleconference.com/ " target="_blank" rel="noopener">Non Fungible Conference —
-            the
-            show</a></li>
+        <li><a href="https://crocoverse.com/ " target="_blank" rel="noopener">The Crocoverse</a></li>
+        <li><a href="https://siriuscrocodile.com/ " target="_blank" rel="noopener">Sirius Crocodile</a></li>
       </ul>
+
+      <ul class="socials__list" aria-label="Socials">
+        <li>
+          <a href="https://www.instagram.com/siriuscrocodile" target="_blank" rel="noopener me"
+            aria-label="Instagram — @siriuscrocodile">
+            <svg class="socials__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <circle cx="12" cy="12" r="4.5" />
+              <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none" />
+            </svg>
+            <span class="socials__label">Instagram</span>
+            <span class="socials__handle">@siriuscrocodile</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/siriuscrocodile" target="_blank" rel="noopener me"
+            aria-label="X (formerly Twitter) — @siriuscrocodile">
+            <svg class="socials__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.743l7.73-8.835L2.026 2.25H8.08l4.263 5.633 5.9-5.633Zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                fill="currentColor" />
+            </svg>
+            <span class="socials__label">X (Twitter)</span>
+            <span class="socials__handle">@siriuscrocodile</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.youtube.com/@siriuscrocodile" target="_blank" rel="noopener me"
+            aria-label="YouTube — @siriuscrocodile">
+            <svg class="socials__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path
+                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                fill="currentColor" />
+            </svg>
+            <span class="socials__label">YouTube</span>
+            <span class="socials__handle">@siriuscrocodile</span>
+          </a>
+        </li>
+      </ul>
+
       <p class="links__note">
         Canonical links live on the artist's socials and on <a href="https://objkt.com" target="_blank"
           rel="noopener">objkt</a>.

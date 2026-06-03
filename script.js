@@ -58,21 +58,76 @@
     if (v) { try { v.pause(); } catch {} }
   };
 
+  const motionOff = () => body.dataset.motion === 'off' || prefersReduced.matches;
+
+  const closePanel = (dialog) => {
+    if (!dialog || !dialog.open || dialog.classList.contains('is-closing')) return;
+    if (motionOff()) { dialog.close(); return; }
+
+    // Cancel any active animations (e.g. the stale open animation still in
+    // fill state) — two WAAPI animations compositing on the same properties
+    // can produce a single-frame glitch mid-close.
+    dialog.getAnimations().forEach(a => { try { a.cancel(); } catch (_) {} });
+
+    dialog.classList.add('is-closing');
+
+    const anim = dialog.animate(
+      [
+        { opacity: 1, transform: 'translateY(0) scale(1)' },
+        { opacity: 0, transform: 'translateY(18px) scale(0.972)' },
+      ],
+      { duration: 220, easing: 'cubic-bezier(0.55, 0, 1, 0.45)', fill: 'forwards' }
+    );
+    // Backdrop: duration must match dialog's, fill: 'forwards' prevents it
+    // snapping back to full opacity before dialog.close() is called.
+    try {
+      dialog.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        { duration: 220, easing: 'ease', fill: 'forwards', pseudoElement: '::backdrop' }
+      );
+    } catch (_) {}
+
+    const finish = () => {
+      dialog.classList.remove('is-closing');
+      if (dialog.open) dialog.close();
+    };
+    anim.onfinish = finish;
+    setTimeout(finish, 320); // safety net if onfinish never fires
+  };
+
   const openPanel = (n) => {
     const dialog = panelModals[n];
     if (!dialog || typeof dialog.showModal !== 'function' || dialog.open) return;
     lastModalTrigger = document.activeElement;
     dialog.showModal();
     playModalVideo(dialog);
+
+    if (!motionOff()) {
+      dialog.animate(
+        [
+          { opacity: 0, transform: 'translateY(24px) scale(0.968)' },
+          { opacity: 1, transform: 'translateY(0) scale(1)' },
+        ],
+        { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'both' }
+      );
+      try {
+        dialog.animate(
+          [{ opacity: 0 }, { opacity: 1 }],
+          { duration: 300, easing: 'ease', pseudoElement: '::backdrop' }
+        );
+      } catch (_) {}
+    }
   };
 
   Object.values(panelModals).forEach((dialog) => {
     if (!dialog) return;
     dialog.querySelectorAll('[data-close]').forEach((b) =>
-      b.addEventListener('click', () => dialog.open && dialog.close()));
-    // click on the backdrop (the dialog box itself, outside the card) closes
-    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-    // on close (Esc / .close() / backdrop): pause video, restore focus
+      b.addEventListener('click', () => closePanel(dialog)));
+    // click on the backdrop (the dialog element itself, outside the card)
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) closePanel(dialog); });
+    // Esc fires cancel — prevent immediate close, run our animated sequence instead
+    dialog.addEventListener('cancel', (e) => { e.preventDefault(); closePanel(dialog); });
+    // on actual close: pause video, restore focus
     dialog.addEventListener('close', () => {
       stopModalVideo(dialog);
       if (lastModalTrigger && typeof lastModalTrigger.focus === 'function') {
