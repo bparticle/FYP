@@ -75,6 +75,89 @@ a:hover, a:focus-visible {
 .skip-link:focus { transform: translateY(0); }
 
 /* =========================================================
+   AUCTION NOTICE — emergency live banner
+   Ink ground / paper type, deadpan institutional register.
+   Sticky-top so it pins on scroll without layout tricks.
+   Blinking square pip = live indicator, no colour added.
+   Dismissible per session via the × button.
+   ========================================================= */
+.auction-notice {
+  position: sticky;
+  top: 0;
+  z-index: 998;
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: var(--b);
+  font-family: var(--font-mono);
+}
+.auction-notice[hidden] { display: none; }
+.auction-notice__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+}
+.auction-notice__pip {
+  flex: none;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--paper);
+  animation: notice-pip 1.2s step-start infinite;
+}
+@keyframes notice-pip {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auction-notice__pip { animation: none; opacity: 1; }
+}
+.auction-notice__copy {
+  flex: 1;
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.auction-notice__copy a {
+  color: var(--paper);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.auction-notice__copy a:hover,
+.auction-notice__copy a:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+  outline: 2px solid var(--paper);
+  outline-offset: 1px;
+  text-decoration: none;
+}
+.auction-notice__dismiss {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--b);
+  font-family: var(--font-mono);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.auction-notice__dismiss:hover,
+.auction-notice__dismiss:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--paper);
+  outline: 2px solid var(--paper);
+  outline-offset: 1px;
+}
+
+/* =========================================================
    HERO — static backdrop washed to near-white,
    triptych and plaque sit above. Bottom fades to salmon.
    ========================================================= */
