@@ -747,12 +747,12 @@ html.no3d .stage3d__plaque {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 9px;
+  padding: 6px 10px;
   background: var(--ink);
   color: var(--paper);
   border: 1px solid var(--paper);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -761,7 +761,7 @@ html.no3d .stage3d__plaque {
   padding-right: 8px;
   border-right: 1px solid var(--paper);
 }
-.hotspot__tip { opacity: 0.82; letter-spacing: 0.12em; }
+.hotspot__tip { opacity: 0.88; letter-spacing: 0.09em; }
 .hotspot:hover .hotspot__badge,
 .hotspot:focus-visible .hotspot__badge { background: var(--link); }
 .hotspot:focus-visible { outline: none; }
