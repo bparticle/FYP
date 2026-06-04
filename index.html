@@ -84,30 +84,6 @@
 
   <a class="skip-link" href="#main">skip to content</a>
 
-  <!-- ============ AUCTION NOTICE — opened early, session-dismissible.
-       Replace the href below with the live auction listing URL.        ============ -->
-  <div class="auction-notice" id="auction-notice" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="auction-notice__inner">
-      <span class="auction-notice__pip" aria-hidden="true"></span>
-      <p class="auction-notice__copy">
-        auction now live &middot; I.&nbsp;Supplicant &middot;<!-- OBJKT_URL: replace href with auction listing -->
-        <a href="https://objkt.com/tokens/KT1CNQK5y5Gj2XRswo9dfZzY3UNkVQJM9uLW/8"
-           target="_blank" rel="noopener">bid on objkt&thinsp;&#x2192;</a>
-      </p>
-      <button class="auction-notice__dismiss" type="button" aria-label="Dismiss auction notice">&times;</button>
-    </div>
-  </div>
-  <script>
-    (function () {
-      var n = document.getElementById('auction-notice');
-      if (!n) return;
-      try { if (sessionStorage.getItem('fyp.notice') === 'off') { n.hidden = true; return; } } catch (e) {}
-      n.querySelector('.auction-notice__dismiss').addEventListener('click', function () {
-        n.hidden = true;
-        try { sessionStorage.setItem('fyp.notice', 'off'); } catch (e) {}
-      });
-    })();
-  </script>
 
   <!-- ============ HERO / 3D STAGE — the object leads.
        Opens with the closed booklet slowly turning over a faded backdrop, the
@@ -493,8 +469,7 @@
     <section class="links" id="links" aria-labelledby="links-title">
       <h2 id="links-title" class="links__h">links.</h2>
       <ul class="links__list">
-        <li><a href="./process-video.html">process video — voiceover transcript</a></li>
-        <li><a href="https://objkt.com" target="_blank" rel="noopener">objkt.com — the marketplace</a></li>
+<li><a href="https://objkt.com" target="_blank" rel="noopener">objkt.com — the marketplace</a></li>
         <li><a href="https://objkt.com/exhibitions/fyp-for-your-page-31562766" target="_blank" rel="noopener">objkt.one
             — the curation</a></li>
         <li><a href="https://crocoverse.com/ " target="_blank" rel="noopener">The Crocoverse</a></li>
