@@ -9,7 +9,6 @@ print raffle for holders, plus two companion 1/1s in the same body of work.
 
 ```
 index.html              — the main triptych page
-process-video.html      — promo/process transcript page
 style.css               — all styles (Functional Anti-Design, art-matched palette)
 script.js               — motion toggle + easter egg
 scene3d.js              — the scroll-driven 3D triptych (Three.js + GSAP)
